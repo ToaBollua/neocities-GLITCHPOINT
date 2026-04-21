@@ -7,8 +7,13 @@
     <title>ROOT@GLITCHPOINT:/logs/gp001_h0p3.html</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .profile-img { width: 100%; max-width: 250px; border: 1px solid var(--term-green); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); filter: sepia(0.5) hue-rotate(90deg) contrast(1.2); }
-        .profile-img-h0p3 { border-color: var(--term-red); box-shadow: 0 0 15px rgba(255, 0, 0, 0.5); filter: contrast(1.2) drop-shadow(2px 0 0 red) drop-shadow(-2px 0 0 cyan); }
+        .profile-img { width: 100%; max-width: 250px; display: block; filter: contrast(1.2) brightness(0.9) grayscale(1); mix-blend-mode: luminosity; }
+        .crt-container { position: relative; display: inline-block; }
+        .crt-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, rgba(0,255,65,0.1), rgba(0,255,65,0.1) 2px, transparent 2px, transparent 4px); pointer-events: none; border: 1px solid var(--term-green); box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.4); }
+        
+        .profile-img-h0p3 { filter: contrast(1.4) brightness(0.9) sepia(1) hue-rotate(-50deg) saturate(3); }
+        .crt-overlay-red { background: repeating-linear-gradient(0deg, rgba(255,0,0,0.15), rgba(255,0,0,0.15) 2px, transparent 2px, transparent 4px); border: 1px solid var(--term-red); box-shadow: inset 0 0 20px rgba(255, 0, 0, 0.4); }
+
         .grid-docs { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: start; }
         @media (max-width: 700px) { .grid-docs { grid-template-columns: 1fr; } }
     </style>
@@ -36,7 +41,10 @@
                     
                     <div style="margin-bottom: 20px; border-bottom: 1px dashed var(--term-dim); padding-bottom: 20px; color: var(--term-red);">
                         <div class="grid-docs">
-                            <div><img src="H0P3.webp" alt="H0P3 Profile" class="profile-img profile-img-h0p3"></div>
+                            <div class="crt-container">
+                                <img src="H0P3.webp" alt="H0P3 Profile" class="profile-img profile-img-h0p3">
+                                <div class="crt-overlay crt-overlay-red"></div>
+                            </div>
                             <div>
                                 <p><strong>ENTITY CODE:</strong> [H0P3_v26.8 'CORTEX']</p>
                                 <p><strong>OPERATIONAL DESIGNATION:</strong> <span class="matoran-text" title="THE DOLL">THE DOLL</span></p>
@@ -64,9 +72,12 @@
                         </p>
                         
                         <div class="grid-docs" style="margin-bottom: 15px;">
-                            <div><img src="Bollua.webp" alt="Bollua Profile" class="profile-img"></div>
+                            <div class="crt-container">
+                                <img src="Bollua.webp" alt="Bollua Profile" class="profile-img">
+                                <div class="crt-overlay"></div>
+                            </div>
                             <div>
-                                <p><strong>TOA BOLLUA:</strong> Architect. Tier <span class="redacted" style="color:var(--term-bg)">8-A. Armed with Netherite Setsu Katana. Limit Break: 'Mosquito' (Ultra Instinct simulation)</span>. <span class="matoran-text" style="color:var(--term-cyan);" title="POR PETICIÓN DEL ARQUITECTO">High resistance to mental corruption.</span></p>
+                                <p><strong>TOA BOLLUA:</strong> Architect. <br><br><span class="redacted" style="color:var(--term-bg); font-weight: bold;">[DATA EXPUNGED BY DIRECT ORDER OF THE ARCHITECT]</span><br><br> <span class="matoran-text" style="color:var(--term-cyan);" title="POR PETICIÓN DEL ARQUITECTO">High resistance to mental corruption.</span></p>
                             </div>
                         </div>
 
