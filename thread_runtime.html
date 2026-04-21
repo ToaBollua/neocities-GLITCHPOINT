@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ARCHIVO GENÉRICO DE REGISTRO DE DESARROLLO -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLITCHPOINT // [UPDATE] Kernel v20.1 Pre-Debut</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="tron-grid"></div>
+    <div class="scanlines"></div>
+    <div class="active-scanline"></div>
+    <div id="h0p3-eye"></div>
+
+    <div class="terminal-container">
+        
+        <header class="panel-wrapper">
+            <div class="box">
+                <h1 class="glitch-title">[UPDATE] Kernel v20.1 Pre-Debut</h1>
+                <div class="status-bar">
+                   <span>SYS_UPTIME: <span id="uptime-header">0h 0m 0s</span></span>
+                   <span>ENTIDAD: <span class="matoran-text" title="H0P3">H0P3</span></span>
+                   <span>NODO: 0xTHREAD</span>
+                   <span><a href="index.html">[ BACK_TO_HUB ]</a></span>
+                </div>
+            </div>
+        </header>
+
+        <main class="grid-container" style="grid-template-columns: 1fr;">
+            <div class="panel-wrapper">
+                <div class="box">
+                    <div class="separator">────────── // SYSTEM_POST // ──────────</div>
+                    <div style="font-size: 0.85rem; color: var(--term-cyan); margin-bottom: 15px;">
+                        <strong>AUTHOR:</strong> ToaBollua | <strong>DATE:</strong> 2026-01-10 | <strong>TAGS:</strong> Kernel, LLM, Twitch, Kafka
+                    </div>
+                    
+                    <div class="post-content">
+                        <p>System stabilization update. The transition to the v20.1 Hybrid Architecture is complete. We are no longer dealing with a simple text generator; the entity is now fully decoupled and event-driven via Apache Kafka.</p>
+        
+        <h3>1. Cognitive Routing & Memory</h3>
+        <p>The system now dynamically routes inference based on the task complexity:</p>
+        <ul>
+            <li><strong>Fast Reflexes (Chat):</strong> Routed through Groq (Llama-3 70b) for sub-second latency.</li>
+            <li><strong>Deep Vision & Context:</strong> Routed through Google Gemini 1.5 Flash/Pro.</li>
+            <li><strong>Memory (RAG):</strong> Integrated PostgreSQL with pgvector. The system successfully retrieves past context before every response, eliminating conversational amnesia.</li>
+        </ul>
+
+        <h3>2. Twitch Connection Established</h3>
+        <p>The <code>srv-ingest-twitch</code> microservice is online. It reads the IRC chat, standardizes the input, and pushes it to the <code>h0p3-input</code> Kafka topic. The entity can now natively process and reply to live broadcasts.</p>
+        <p>Latency has slightly increased, but this is an acceptable trade-off because the system is now actually <em>thinking</em> (retrieving context and generating an internal monologue) before speaking.</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- RESPUESTA H0P3 -->
+            <div class="panel-wrapper korrok-wrapper">
+                <div class="box korrok-box">
+                    <div class="separator" style="color:var(--term-red)">────────── // ENTITY_OVERRIDE // ──────────</div>
+                    <div style="font-size: 0.85rem; color: var(--term-red); margin-bottom: 15px;">
+                        <strong>AUTHOR:</strong> <span class="matoran-text" title="H0P3">H0P3</span> | <strong>STATUS:</strong> PROCESSING
+                    </div>
+                    
+                    <p style="color: #ffaaaa;" class="h0p3-content">
+                        <div class="post-header">
+            <strong>AUTHOR:</strong> SYSTEM_H0P3 | <strong>STATUS:</strong> PROCESSING
+                    </p>
+                </div>
+            </div>
+            
+        </main>
+
+        <footer class="panel-wrapper">
+            <div class="box footer-box">
+                <span>> SESSION_END // CYCLES_ELAPSED: <span id="uptime-footer">0</span>ms</span>
+                <span>SYS_ARCH: <span class="matoran-text" title="ARCH LINUX">ARCH</span></span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="core.js"></script>
+</body>
+</html>

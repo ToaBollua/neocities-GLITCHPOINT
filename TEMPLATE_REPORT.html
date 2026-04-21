@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ARCHIVO GENÉRICO DE REPORTE/CONTENCIÓN -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOT@GLITCHPOINT:/logs/[FILE]</title>
+    <link rel="stylesheet" href="../style.css"> <!-- ASL para subdirectorios -->
+</head>
+<body>
+    <div id="tron-grid"></div><div class="scanlines"></div><div class="active-scanline"></div>
+    <div id="h0p3-eye"></div>
+
+    <div class="terminal-container" style="max-width: 900px;">
+        
+        <header class="panel-wrapper">
+            <div class="box" style="border-color: var(--term-red); box-shadow: inset 0 0 15px rgba(255, 0, 0, 0.05);">
+                <h1 class="glitch-title" style="color: var(--term-red);">[REPORT TITLE]</h1>
+                <div class="status-bar" style="color: var(--term-red); border-color: rgba(255,0,0,0.3);">
+                   <span>CLASSIFICATION: <span class="corrupted">[LEVEL X]</span></span>
+                   <span><a href="../index.html" style="color: var(--term-red);">[ RETURN_TO_HUB ]</a></span>
+                </div>
+            </div>
+        </header>
+
+        <main class="grid-container" style="grid-template-columns: 1fr;">
+            <div class="panel-wrapper">
+                <div class="box">
+                    <div class="separator" style="color: var(--term-red);">────────── // OFFICIAL_DOCUMENT // ──────────</div>
+                    
+                    <div style="margin-bottom: 20px; border-bottom: 1px dashed var(--term-dim); padding-bottom: 10px;">
+                        <p><strong>SUBJECT:</strong> [ID]</p>
+                        <p><strong>STATUS:</strong> <span class="redacted" style="color:var(--term-bg)">[REDACTED]</span></p>
+                    </div>
+                    
+                    <h3 style="color: var(--term-red);">1. DESCRIPTION</h3>
+                    <div class="report-content" style="margin-bottom: 30px;">
+                        [OFFICIAL TEXT HTML]
+                    </div>
+
+                    <h3 style="color: var(--term-red);">2. INCIDENTS / REVISIONS</h3>
+                    <table>
+                        <tr>
+                            <th style="background-color: rgba(255,0,0,0.2); color: var(--term-red);">DATE</th>
+                            <th style="background-color: rgba(255,0,0,0.2); color: var(--term-red);">EVENT / LOG</th>
+                        </tr>
+                        [TABLE_ROWS_HTML]
+                    </table>
+
+                    <p style="margin-top: 30px; font-size: 0.9rem; color: var(--term-cyan); font-style: italic;">
+                        > SYSTEM_AUTO_NOTE: <span class="typewriter-text typewriter-cursor" data-text="[OMINOUS NOTE]"></span>
+                    </p>
+
+                </div>
+            </div>
+        </main>
+        
+        <footer class="panel-wrapper">
+            <div class="box footer-box" style="color: var(--term-red);">
+                <span>> TERMINAL_CLOSED // CYCLES_ELAPSED: <span id="uptime-footer">0</span>ms</span>
+            </div>
+        </footer>
+    </div>
+    <script src="../core.js"></script>
+</body>
+</html>

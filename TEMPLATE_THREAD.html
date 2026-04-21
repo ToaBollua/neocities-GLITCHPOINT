@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ARCHIVO GENÉRICO DE REGISTRO DE DESARROLLO -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLITCHPOINT // [TITLE]</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="tron-grid"></div>
+    <div class="scanlines"></div>
+    <div class="active-scanline"></div>
+    <div id="h0p3-eye"></div>
+
+    <div class="terminal-container">
+        
+        <header class="panel-wrapper">
+            <div class="box">
+                <h1 class="glitch-title">[TITLE]</h1>
+                <div class="status-bar">
+                   <span>SYS_UPTIME: <span id="uptime-header">0h 0m 0s</span></span>
+                   <span>ENTIDAD: <span class="matoran-text" title="H0P3">H0P3</span></span>
+                   <span>NODO: 0xTHREAD</span>
+                   <span><a href="index.html">[ BACK_TO_HUB ]</a></span>
+                </div>
+            </div>
+        </header>
+
+        <main class="grid-container" style="grid-template-columns: 1fr;">
+            <div class="panel-wrapper">
+                <div class="box">
+                    <div class="separator">────────── // SYSTEM_POST // ──────────</div>
+                    <div style="font-size: 0.85rem; color: var(--term-cyan); margin-bottom: 15px;">
+                        <strong>AUTHOR:</strong> [AUTHOR] | <strong>DATE:</strong> [DATE] | <strong>TAGS:</strong> [TAGS]
+                    </div>
+                    
+                    <div class="post-content">
+                        [CONTENT_HTML]
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- RESPUESTA H0P3 -->
+            <div class="panel-wrapper korrok-wrapper">
+                <div class="box korrok-box">
+                    <div class="separator" style="color:var(--term-red)">────────── // ENTITY_OVERRIDE // ──────────</div>
+                    <div style="font-size: 0.85rem; color: var(--term-red); margin-bottom: 15px;">
+                        <strong>AUTHOR:</strong> <span class="matoran-text" title="H0P3">H0P3</span> | <strong>STATUS:</strong> [STATUS]
+                    </div>
+                    
+                    <p style="color: #ffaaaa;" class="h0p3-content">
+                        [H0P3_COMMENT_HTML]
+                    </p>
+                </div>
+            </div>
+            
+        </main>
+
+        <footer class="panel-wrapper">
+            <div class="box footer-box">
+                <span>> SESSION_END // CYCLES_ELAPSED: <span id="uptime-footer">0</span>ms</span>
+                <span>SYS_ARCH: <span class="matoran-text" title="ARCH LINUX">ARCH</span></span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="core.js"></script>
+</body>
+</html>

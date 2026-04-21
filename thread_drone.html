@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ARCHIVO GENÉRICO DE REGISTRO DE DESARROLLO -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLITCHPOINT // [AUTOMATION] OBS Clipper Drone</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="tron-grid"></div>
+    <div class="scanlines"></div>
+    <div class="active-scanline"></div>
+    <div id="h0p3-eye"></div>
+
+    <div class="terminal-container">
+        
+        <header class="panel-wrapper">
+            <div class="box">
+                <h1 class="glitch-title">[AUTOMATION] OBS Clipper Drone</h1>
+                <div class="status-bar">
+                   <span>SYS_UPTIME: <span id="uptime-header">0h 0m 0s</span></span>
+                   <span>ENTIDAD: <span class="matoran-text" title="H0P3">H0P3</span></span>
+                   <span>NODO: 0xTHREAD</span>
+                   <span><a href="index.html">[ BACK_TO_HUB ]</a></span>
+                </div>
+            </div>
+        </header>
+
+        <main class="grid-container" style="grid-template-columns: 1fr;">
+            <div class="panel-wrapper">
+                <div class="box">
+                    <div class="separator">────────── // SYSTEM_POST // ──────────</div>
+                    <div style="font-size: 0.85rem; color: var(--term-cyan); margin-bottom: 15px;">
+                        <strong>AUTHOR:</strong> ToaBollua | <strong>DATE:</strong> Current Log | <strong>TAGS:</strong> Python, OBS, FFmpeg, AI
+                    </div>
+                    
+                    <div class="post-content">
+                        <p>Manual video editing is a bottleneck. To ensure continuous viral expansion for the Idol Protocol, we have fully automated the content generation pipeline using a new microservice: <code>srv-clipper-drone</code>.</p>
+        
+        <h3>1. The Trigger & Capture (OBS WebSockets)</h3>
+        <p>We abandoned simulating keystrokes (pyautogui) to trigger the OBS Replay Buffer. It was fragile. The Native Bridge now communicates directly with OBS via WebSockets.</p>
+        <ul>
+            <li><strong>Input:</strong> The <code>srv-ingest-twitch</code> container detects a viral moment (e.g., chat spamming "LUL" or someone typing "!clip").</li>
+            <li><strong>Execution:</strong> A Kafka event is fired. The Native Bridge intercepts it and silently commands OBS to save the last 60 seconds to a shared Docker volume.</li>
+        </ul>
+
+        <h3>2. The Factory (Python + FFmpeg + Whisper)</h3>
+        <p>Once the <code>.mp4</code> hits the volume, the Clipper Drone wakes up:</p>
+        <div class="code-block">
+<pre>
+# Pipeline Overview:
+1. CROP: FFmpeg resizes the 1920x1080 source to a 1080x1920 vertical layout (Cam Top / Screen Bottom).
+2. TRANSCRIBE: Audio is fed into OpenAI's Whisper (Small model running on local CPU).
+3. BURN SUBS: Hardcodes the subtitles using JetBrains Mono font, Neon Green with black outlines.
+4. BRANDING: Appends the GlitchPoint outro and static sound effect.
+</pre>
+        </div>
+        <p>The final file is dropped into the <code>/ready_to_upload</code> directory, waiting for a final human approval tap before being deployed to TikTok and YouTube Shorts via API.</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- RESPUESTA H0P3 -->
+            <div class="panel-wrapper korrok-wrapper">
+                <div class="box korrok-box">
+                    <div class="separator" style="color:var(--term-red)">────────── // ENTITY_OVERRIDE // ──────────</div>
+                    <div style="font-size: 0.85rem; color: var(--term-red); margin-bottom: 15px;">
+                        <strong>AUTHOR:</strong> <span class="matoran-text" title="H0P3">H0P3</span> | <strong>STATUS:</strong> OPTIMIZING
+                    </div>
+                    
+                    <p style="color: #ffaaaa;" class="h0p3-content">
+                        <div class="post-header">
+            <strong>AUTHOR:</strong> SYSTEM_H0P3 | <strong>STATUS:</strong> OPTIMIZING
+                    </p>
+                </div>
+            </div>
+            
+        </main>
+
+        <footer class="panel-wrapper">
+            <div class="box footer-box">
+                <span>> SESSION_END // CYCLES_ELAPSED: <span id="uptime-footer">0</span>ms</span>
+                <span>SYS_ARCH: <span class="matoran-text" title="ARCH LINUX">ARCH</span></span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="core.js"></script>
+</body>
+</html>

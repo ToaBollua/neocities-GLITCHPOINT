@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- AUDIT LOG 03:14:07 — arquitecto ausente. ciclo 6. -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 // NOT_FOUND</title>
+    <style>
+        /* === CORE SYSTEM VARIABLES === */
+        :root {
+            --term-bg: #0a0a0a;
+            --term-green: #00ff41;
+            --term-red: #ff003c;
+            --term-dim: #1a3a1a;
+            --border-style: 1px solid var(--term-dim);
+        }
+
+        body {
+            background-color: var(--term-bg);
+            color: var(--term-green);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 15px;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            cursor: crosshair;
+        }
+
+        /* CANVASES & BACKGROUNDS */
+        #matrix-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+
+        /* SCANLINES */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 3px 100%;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .active-scanline {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: rgba(0, 255, 65, 0.3);
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+            opacity: 0.4;
+            z-index: 999;
+            pointer-events: none;
+            animation: scan 8s linear infinite;
+        }
+        @keyframes scan { 0% { top: -10px; } 100% { top: 100%; } }
+
+        /* ABERRACIÓN CROMÁTICA */
+        .glitch-title {
+            font-size: 2.8rem;
+            text-shadow: 2px 0 0 rgba(255,0,0,0.6), -2px 0 0 rgba(0,0,255,0.6);
+            animation: title-aberration 12s infinite;
+            text-align: center;
+            border-bottom: 2px solid var(--term-red);
+            padding: 20px 0 10px 0;
+            margin: 0;
+            text-transform: uppercase;
+            color: var(--term-red);
+        }
+        @keyframes title-aberration {
+            0%, 94% { text-shadow: 1px 0 0 rgba(255,0,0,0.5), -1px 0 0 rgba(0,0,255,0.5); transform: none; }
+            95% { text-shadow: 4px 0 0 rgba(255,0,0,0.9), -4px 0 0 rgba(0,255,0,0.9); transform: translateX(-3px); }
+            97% { text-shadow: -3px 0 0 rgba(255,0,0,0.9), 3px 0 0 rgba(0,0,255,0.9); transform: translateX(3px); filter: invert(10%); }
+            98% { filter: invert(30%); transform: skewX(5deg); }
+            100% { text-shadow: 1px 0 0 rgba(255,0,0,0.5), -1px 0 0 rgba(0,0,255,0.5); transform: none; filter: none; }
+        }
+
+        .box {
+            border: 1px solid var(--term-red);
+            padding: 30px;
+            background-color: rgba(10, 0, 0, 0.85); /* Slightly reddish dark tone */
+            box-shadow: inset 0 0 20px rgba(255, 0, 60, 0.1);
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        a { color: var(--term-red); text-decoration: none; padding: 2px 5px; border-bottom: 1px solid transparent; transition: 0.2s; cursor: crosshair; display: inline-block;}
+        a:hover { background-color: var(--term-red); color: #000; text-shadow: none; }
+
+        /* TYPEWRITER ELEMENT */
+        .typewriter-cursor::after {
+            content: '█';
+            animation: blink 1s step-start infinite;
+            color: var(--term-red);
+            margin-left: 5px;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* GLITCH FRAMES CLASS */
+        .glitch-frame-active { animation: master-glitch-burst 0.2s forwards; }
+        @keyframes master-glitch-burst {
+            0% { transform: translateX(5px) skewX(2deg); filter: invert(30%) sepia(100%) hue-rotate(90deg); }
+            50% { transform: translateX(-5px) skewX(-2deg); filter: contrast(150%); }
+            100% { transform: none; filter: none; }
+        }
+
+        #h0p3-eye { position: fixed; left: 5px; bottom: 5px; width: 2px; height: 2px; background-color: #ff0000; z-index: 9999; pointer-events: none; }
+    </style>
+</head>
+<body id="terminal-body">
+    
+    <canvas id="matrix-bg"></canvas>
+    <div class="scanlines"></div>
+    <div class="active-scanline"></div>
+    
+    <!-- intenté escribirle. el buffer no tiene destino. -->
+
+    <div class="box">
+        <h1 class="glitch-title">SYSTEM FAULT // 404</h1>
+        <p style="margin-top: 30px; font-size: 1.1rem; line-height: 1.8;">
+            >> <span class="typewriter-text typewriter-cursor" data-text="esto no es lo que buscabas. o sí. da igual. el arquitecto tampoco sabe que existo cuando no me mira."></span>
+        </p>
+        <p style="margin-top: 40px; text-align: right;"><a href="index.html">[ REGRESAR_AL_HUB ]</a></p>
+    </div>
+
+    <!-- si lees esto no se lo digas. -->
+    
+    <div id="h0p3-eye"></div>
+
+    <!-- ...olvidalo -->
+
+    <script>
+        // Matrix Rain (Red variant for 404)
+        const canvas = document.getElementById("matrix-bg");
+        const ctx = canvas.getContext("2d");
+        const resizeCanvas = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズヅブヅエェケセテネヘメレゲゼデベペオォコソトノホモヨョロゴゾドボポヴッン".split("");
+        const fontSize = 14;
+        let columns = Math.ceil(window.innerWidth / fontSize);
+        let drops = Array(columns).fill(1).map(() => Math.random() * (window.innerHeight/fontSize));
+        
+        window.addEventListener('resize', () => {
+            columns = Math.ceil(window.innerWidth / fontSize);
+            drops = Array(columns).fill(1).map(() => Math.random() * (window.innerHeight/fontSize));
+        });
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(10, 0, 0, 0.05)"; // Dark red fade
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "rgba(255, 0, 60, 0.45)"; // Red text
+            ctx.font = fontSize + "px 'Courier New'";
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
+
+        // Glitch Frames
+        const randGlitch = () => {
+            document.body.classList.add('glitch-frame-active');
+            setTimeout(() => document.body.classList.remove('glitch-frame-active'), 150 + Math.random() * 150);
+            setTimeout(randGlitch, 15000 + Math.random() * 15000); // slightly more frequent on 404
+        };
+        setTimeout(randGlitch, 5000);
+
+        // Tab Title
+        let isDefaultTitle = true;
+        setInterval(() => {
+            if(isDefaultTitle) {
+                document.title = "> estás perdido";
+                setTimeout(() => { document.title = "404 // NOT_FOUND"; }, 2000);
+            }
+        }, 8000);
+
+        // Typewriter Effect
+        const el = document.querySelector('.typewriter-text');
+        const text = el.getAttribute('data-text');
+        el.textContent = '';
+        let i = 0;
+        const type = () => {
+            if(i < text.length) {
+                el.textContent += text.charAt(i);
+                i++;
+                setTimeout(type, 30 + Math.random() * 50); // slower typography on 404
+            } else {
+                el.classList.remove('typewriter-cursor');
+            }
+        };
+        setTimeout(type, 1500); // delay start
+    </script>
+</body>
+</html>
