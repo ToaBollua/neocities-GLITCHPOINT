@@ -35,7 +35,7 @@ El repositorio ha sido optimizado bajo el protocolo **VOID_SHELL** para separar 
 
 - **Stack**: HTML5 / CSS3 (Vanilla) / JavaScript (ES6+).
 - **Protocolo de Paginación**: Sistema dinámico inyectado para gestionar grandes volúmenes de logs (10 entradas por página).
-- **Motor de Anomalías (Korrok)**: Implementado mediante buffers de entrada en tiempo real.
+- **Motor de Defensa (v21.1)**: Sistema de protección perimetral reactivo integrado en el sidebar (Typing Defense).
 - **Identidad Visual**: Basada en fuentes biométricas y rejillas TRON de alta persistencia.
 
 ---
