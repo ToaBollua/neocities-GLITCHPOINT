@@ -9,7 +9,7 @@
 
 @font-face {
     font-family: 'Matoran';
-    src: url('Matoran.ttf') format('truetype');
+    src: url('assets/fonts/Matoran.ttf') format('truetype');
     font-weight: normal; font-style: normal;
 }
 
@@ -181,3 +181,35 @@ ul { list-style-type: none; padding-left: 0; }
 li { margin-bottom: 8px; border-left: 2px solid var(--term-cyan); padding-left: 10px; }
 
 .footer-box { display: flex; justify-content: space-between; font-size: 0.9rem; }
+
+/* === PAGINATION CONTROLS === */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 15px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--term-cyan);
+}
+
+.nav-btn {
+    cursor: pointer;
+    padding: 2px 8px;
+    border: 1px solid rgba(0, 207, 255, 0.3);
+    background: rgba(0, 207, 255, 0.05);
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.nav-btn:hover {
+    background: var(--term-cyan);
+    color: var(--term-bg);
+    box-shadow: 0 0 10px var(--term-cyan);
+}
+
+.page-info {
+    letter-spacing: 1px;
+    opacity: 0.8;
+}

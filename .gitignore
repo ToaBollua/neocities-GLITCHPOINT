@@ -1,0 +1,26 @@
+# === GLITCHPOINT REPOSITORY FILTER ===
+
+# Ignore development scripts
+*.py
+
+# Ignore heavy documentation and source binaries (Original DOCX and exported PDFs)
+*.pdf
+*.docx
+docs/
+internal/
+
+# Ignore text dumps and temporary buffers
+content_dump.txt
+*.log
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore local editor configs
+.vscode/
+.idea/
+*.swp
+*.bak
+
+# End of line. System clean.

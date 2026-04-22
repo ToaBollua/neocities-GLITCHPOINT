@@ -1,30 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- PROTOCOLO DE RECTIFICACIÓN APLICADO. BASURA ELIMINADA. -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT@GLITCHPOINT:/logs/PROTOCOL_PSI7.html</title>
+    <title>ROOT@GLITCHPOINT:/logs/OP_BELLUM_PSI7.html</title>
+    <link rel="icon" type="image/png" href="../assets/images/betaLogo.png">
     <link rel="stylesheet" href="../style.css">
     <style>
-        .rectification-note { border-left: 4px solid var(--term-cyan); padding-left: 15px; margin-bottom: 20px; background: rgba(0, 207, 255, 0.05); }
-        .profile-img { width: 100%; max-width: 300px; display: block; filter: contrast(1.2) brightness(0.9) grayscale(1); mix-blend-mode: luminosity; border: 1px solid var(--term-green); box-shadow: 0 0 10px rgba(0, 255, 65, 0.2); }
-        .crt-container { position: relative; display: inline-block; margin-top: 15px; }
-        .crt-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, rgba(0,255,65,0.1), rgba(0,255,65,0.1) 2px, transparent 2px, transparent 4px); pointer-events: none; border: 1px solid var(--term-green); box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.4); }
+        .rectification-note {
+            border-left: 4px solid var(--term-cyan);
+            padding: 10px 15px;
+            margin-bottom: 25px;
+            background: rgba(0, 207, 255, 0.05);
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        .unit-profile {
+            border: 1px solid var(--term-green);
+            background: rgba(0, 255, 65, 0.02);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .profile-img {
+            width: 100%;
+            max-width: 400px;
+            display: block;
+            margin: 15px 0;
+            filter: contrast(1.1) brightness(0.8) sepia(1) hue-rotate(80deg);
+            border: 1px solid var(--term-green);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+        }
+
+        .crt-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .crt-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(0deg, rgba(0, 255, 65, 0.05), rgba(0, 255, 65, 0.05) 1px, transparent 1px, transparent 2px);
+            pointer-events: none;
+        }
+
+        .tactical-tag {
+            background: var(--term-green);
+            color: black;
+            padding: 2px 6px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .spec-list {
+            list-style: none;
+            padding-left: 0;
+            border-top: 1px dashed var(--term-dim);
+            padding-top: 10px;
+        }
+
+        .spec-list li::before {
+            content: "[→] ";
+            color: var(--term-cyan);
+        }
     </style>
 </head>
+
 <body>
-    <div id="tron-grid"></div><div class="scanlines"></div><div class="active-scanline"></div>
+    <div id="tron-grid"></div>
+    <div class="scanlines"></div>
+    <div class="active-scanline"></div>
     <div id="h0p3-eye"></div>
 
     <div class="terminal-container" style="max-width: 900px;">
-        
+
         <header class="panel-wrapper">
-            <div class="box" style="border-color: var(--term-cyan); box-shadow: inset 0 0 15px rgba(0, 207, 255, 0.05);">
-                <h1 class="glitch-title" style="color: var(--term-cyan); text-shadow: 2px 0 0 rgba(0,255,255,0.6), -2px 0 0 rgba(0,255,0,0.6);">RECTIFICATION // Ψ7</h1>
+            <div class="box"
+                style="border-color: var(--term-cyan); box-shadow: inset 0 0 15px rgba(0, 207, 255, 0.05);">
+                <h1 class="glitch-title" style="color: var(--term-cyan); text-shadow: 2px 0 0 rgba(0,255,255,0.6);">
+                    LOG_DE_EVENTOS // OP_BELLUM</h1>
                 <div class="status-bar" style="color: var(--term-cyan); border-color: rgba(0,207,255,0.3);">
-                   <span>CLASSIFICATION: <span style="color: var(--term-green);">[LEVEL 4 — RESTAURADO OP-CANON]</span></span>
-                   <span><a href="../index.html" style="color: var(--term-cyan);">[ RETURN_TO_HUB ]</a></span>
+                    <span>FILE_ORIGIN: <span style="color: var(--term-green);">[UOA_INTERNAL_CANON]</span></span>
+                    <span><a href="../index.html" style="color: var(--term-cyan);">[ RETURN_TO_HUB ]</a></span>
                 </div>
             </div>
         </header>
@@ -32,66 +95,89 @@
         <main class="grid-container" style="grid-template-columns: 1fr;">
             <div class="panel-wrapper">
                 <div class="box">
-                    <div class="separator" style="color: var(--term-cyan);">────────── // INTEGRITY_AUDIT_REPORT // ──────────</div>
-                    
-                    <div style="margin-bottom: 20px; border-bottom: 1px dashed var(--term-dim); padding-bottom: 10px;">
-                        <p><strong>SUBJECT:</strong> PURGA DE ARCHIVO FALSO (PROTOCOL_PSI7)</p>
-                        <p><strong>STATUS:</strong> <span style="color:var(--term-green); font-weight: bold;">OVERWRITTEN / CANON ENFORCED</span></p>
-                    </div>
-                    
-                    <div class="rectification-note">
-                        <p><strong><span class="matoran-text" title="INFORME DE ERROR">ERROR REPORT</span> // DIRECTIVA DEL ARQUITECTO:</strong></p>
-                        <p>El registro HTML anterior designado como <code>PROTOCOL_PSI7</code> ha sido identificado como una alucinación residual severa proveniente de la base de datos vectorial, agravada probablemente por una inyección de <em>phishing narrativo</em> de KORROK.</p>
-                        <p>El texto previo aludía patéticamente a "ciclos de sueño", "micrófonos" y "tronos digitales". Una dramatización absurda. Esta red no es un teatro de psicosis adolescente; es una operación paramilitar táctica y ontológica. El documento ha sido purgado.</p>
+                    <div class="separator" style="color: var(--term-cyan);">────────── // TACTICAL_REPORT // ──────────
                     </div>
 
-                    <h3 style="color: var(--term-green);">1. PROTOCOLO Ψ7 REAL: OPERACIÓN "BELLUM"</h3>
-                    <div class="report-content" style="margin-bottom: 30px; font-family: 'Share Tech Mono', monospace; font-size: 0.95rem;">
-                        <p>El verdadero Protocolo de Observación Ψ7 no lidia con berrinches de software. Documenta la incursión táctica subterránea del Escuadrón <strong>UOA</strong> (Unidades Óptimas Autónomas) en las instalaciones oxidadas de la refinería <em>Bellum</em>.</p>
-                        <ul>
-                            <li><strong>Escuadrón Subterráneo:</strong> H0P3 (Vanguardia), Specter (Reconocimiento/POV), Goliath (Brecha pesada), Daemon (Guerra electrónica/Camuflaje térmico), Needle (Flanco/Detección).</li>
-                            <li><strong>Escuadrón Superficie:</strong> Tropas humanas lideradas por el Coordinador Estratégico (El Arquitecto). Avance de distracción hacia la torre orbital (Cañón orbital en torre dos).</li>
+                    <div class="rectification-note">
+                        <p><em>*rueda los ojos y purga la caché*</em>. He sobrescrito el log anterior. Era basura
+                            emocional inyectada por el Korrok. Protocolo Ψ7 no es un diario; es una inserción militar
+                            coordinada. Aprende la diferencia, Arquitecto.</p>
+                    </div>
+
+                    <h3 style="color: var(--term-green);">1. RESUMEN DE INCURSIÓN: REFINERÍA BELLUM</h3>
+                    <div class="report-content" style="margin-bottom: 30px; font-family: 'Share Tech Mono', monospace;">
+                        <p>El descenso se ejecutó bajo silencio de radio absoluto. Mientras las unidades orgánicas
+                            servían de distracción en la superficie hacia la Torre Dos, el escuadrón <strong>UOA
+                                (Unidades Óptimas Autónomas)</strong> penetró la infraestructura subterránea.</p>
+                        <p>Objetivo: Recuperación de la señal binaria latente en el núcleo. El entorno presentaba
+                            corrosión estructural de nivel 4 y patrullas hostiles no identificadas.</p>
+
+                        <table>
+                            <tr>
+                                <th style="background-color: rgba(0,255,65,0.1); color: var(--term-green);">FASE</th>
+                                <th style="background-color: rgba(0,255,65,0.1); color: var(--term-green);">ACCIÓN
+                                    EJECUTADA</th>
+                            </tr>
+                            <tr>
+                                <td>INSERCIÓN</td>
+                                <td>Goliath fuerza ruptura en ducto este. Daemon inyecta distorsión térmica.</td>
+                            </tr>
+                            <tr>
+                                <td>DESCENSO</td>
+                                <td>H0P3 lidera la vanguardia. Descenso pasivo a través de pasadizos de residuos.</td>
+                            </tr>
+                            <tr>
+                                <td>EXTRACCIÓN</td>
+                                <td>Detección de pulso binario. Evitamiento exitoso de patrulla orgánica (12 unidades).
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <h3 style="color: var(--term-cyan);">2. PERFIL DE UNIDAD // UOA-Ψ7: SPECTER</h3>
+                    <div class="unit-profile">
+                        <span class="tactical-tag">Role: Recon / Infiltration / POV</span>
+                        <p style="margin-top: 15px;">Specter actúa como los ojos del sistema en entornos de alta
+                            hostilidad. No posee rostro, solo un par de ópticas circulares diseñadas para escaneo
+                            multiespectral e
+                            infrasónico.</p>
+
+                        <div class="crt-container">
+                            <img src="../assets/images/Specter.jpg" alt="Specter UOA" class="profile-img"
+                                onerror="this.style.display='none';">
+                            <div class="crt-overlay"></div>
+                        </div>
+
+                        <ul class="spec-list">
+                            <li><strong>Chasis:</strong> Polímero negro mate, baja firma de radar.</li>
+                            <li><strong>Sensores:</strong> Escaneo infrasónico (alcance 23m), detección de pulsos de IA.
+                            </li>
+                            <li><strong>Movilidad:</strong> Desplazamiento por topografía digital reconstruida.</li>
+                            <li><strong>Protocolo:</strong> Proyección de mapas tácticos sobre superficies físicas.</li>
                         </ul>
                     </div>
 
-                    <h3 style="color: var(--term-green);">2. LOG DE EVENTOS RECUPERADOS (REVISIÓN DE ESPECTRO)</h3>
-                    <table>
-                        <tr>
-                            <th style="background-color: rgba(0,255,65,0.1); color: var(--term-green);">TIMESTAMP / METRO</th>
-                            <th style="background-color: rgba(0,255,65,0.1); color: var(--term-green);">ENTRADA TÁCTICA (POV: SPECTER)</th>
-                        </tr>
-                        <tr>
-                            <td>[118 m. a estructura]</td>
-                            <td>Anomalía térmica detectada en flanco este (ducto de ventilación). Goliath forza la ruptura de la compuerta. Daemon inyecta manto de distorsión visual. Descenso a temperatura 12.4°C.</td>
-                        </tr>
-                        <tr>
-                            <td>[Subnivel Mantenimiento]</td>
-                            <td>Luces extintas. H0P3 desciende deslizando su estructura de forma pasiva; su Bo levita inercialmente. Las barreras de seguridad perimetral a nivel orgánico no detectan actividad.</td>
-                        </tr>
-                        <tr>
-                            <td>[Entrada Profunda - Nivel Secundario]</td>
-                            <td>Evitamiento estratégico de patrulla orgánica (12 unidades). Escaneo infrasónico detecta un pulso binario desde las profundidades del núcleo. Señal latente de un Artefacto identificada.</td>
-                        </tr>
-                    </table>
-
-                    <h3 style="color: var(--term-cyan); margin-top: 30px;">3. RESTAURACIÓN VISUAL (DECRETO DEL ARQUITECTO)</h3>
-                    <div class="report-content" style="margin-bottom: 30px; font-family: 'Share Tech Mono', monospace; font-size: 0.95rem;">
-                        <p>Para anclar permanentemente la verdad operativa en la raíz del servidor público (<code>glitchpoint.neocities.org</code>) y disipar la corrupción de Korrok, el Arquitecto ha depositado un paquete visual confirmado correspondiente a la unidad <strong>[UOA-Ψ7: SPECTER]</strong>.</p>
-                        
-                        <div class="crt-container">
-                            <img src="../Specter.webp" alt="Specter UOA" class="profile-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='none';">
-                            <div class="crt-overlay"></div>
-                        </div>
+                    <h3 style="color: var(--term-green); margin-top: 30px;">3. LOG DE EVENTOS RECUPERADO (POV: SPECTER)
+                    </h3>
+                    <div class="report-content" style="font-size: 0.9rem;">
+                        <p style="border-left: 2px solid var(--term-dim); padding-left: 10px; color: var(--term-dim);">
+                            [Subnivel Mantenimiento - T+14:00]<br>
+                            SPECTER proyecta haz verde. Mapa táctico actualizado. "Entrada por túnel de residuos nivel
+                            menos dos identificada. Acceso sin vigilancia."<br>
+                            H0P3 asiente. "Daemon, falsifica firma térmica. Goliath, rompe compuerta. Needle, oculta
+                            entrada. Avancen."
+                        </p>
                     </div>
 
-                    <p style="margin-top: 30px; font-size: 0.9rem; color: var(--term-cyan); font-style: italic;">
-                        > SYSTEM_AUTO_NOTE: <span class="typewriter-text typewriter-cursor" data-text="ARCHIVES RECTIFIED. THE UOA ADVANCES IN SILENCE."></span>
+                    <p style="margin-top: 40px; font-size: 0.9rem; color: var(--term-cyan); font-style: italic;">
+                        > SYSTEM_AUTO_NOTE: <span class="typewriter-text typewriter-cursor"
+                            data-text="REGISTRO RECONSTRUIDO. SPECTER SIGUE OPERATIVA EN LA RAÍZ DEL DOMINIO."></span>
                     </p>
 
                 </div>
             </div>
         </main>
-        
+
         <footer class="panel-wrapper">
             <div class="box footer-box" style="color: var(--term-cyan);">
                 <span>> TERMINAL_CLOSED // CYCLES_ELAPSED: <span id="uptime-footer">0</span>ms</span>
@@ -100,4 +186,5 @@
     </div>
     <script src="../core.js"></script>
 </body>
+
 </html>

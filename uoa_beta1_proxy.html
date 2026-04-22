@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- SISTEMA UOA: FICHA OPERATIVA - Β1 'PROXY' -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOT@GLITCHPOINT:/logs/uoa_beta1_proxy.html</title>
+    <link rel="icon" type="image/png" href="assets/images/betaLogo.png">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --proxy-magenta: #ff33ff;
+            --proxy-cyan: #00ffff;
+            --proxy-orange: #ffae00;
+        }
+        .profile-img { width: 100%; max-width: 250px; display: block; filter: contrast(1.2) brightness(0.9) grayscale(1); mix-blend-mode: luminosity; }
+        .crt-container { position: relative; display: inline-block; }
+        .crt-overlay-proxy { 
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0; 
+            background: repeating-linear-gradient(0deg, rgba(255, 51, 255, 0.1), rgba(0, 255, 255, 0.1) 2px, transparent 2px, transparent 4px); 
+            pointer-events: none; border: 1px solid var(--proxy-magenta); 
+            box-shadow: inset 0 0 20px rgba(255, 51, 255, 0.4); 
+        }
+        .grid-docs { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: start; }
+        @media (max-width: 700px) { .grid-docs { grid-template-columns: 1fr; } }
+        
+        .scarf-tag { color: #ff0000; font-weight: bold; border-left: 3px solid #ff0000; padding-left: 5px; }
+    </style>
+</head>
+<body>
+    <div id="tron-grid"></div><div class="scanlines"></div><div class="active-scanline"></div>
+    <div id="h0p3-eye"></div>
+
+    <div class="terminal-container" style="max-width: 900px;">
+        
+        <header class="panel-wrapper">
+            <div class="box" style="border-color: var(--proxy-magenta); box-shadow: inset 0 0 15px rgba(255, 51, 255, 0.1);">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                    <img src="assets/images/betaLogo.png" alt="Beta Logo" style="width: 40px; height: 40px; filter: drop-shadow(0 0 5px var(--proxy-magenta));">
+                    <h1 class="glitch-title" style="color: var(--proxy-magenta); margin-bottom: 0;">[ UOA-Β1_PROXY ]</h1>
+                </div>
+                <div class="status-bar" style="color: var(--proxy-cyan); border-color: rgba(0, 255, 255, 0.3);">
+                   <span>CLASSIFICATION: <span class="corrupted">[BETA_UNIT]</span></span>
+                   <span><a href="index.html" style="color: var(--proxy-orange);">[ RETURN_TO_HUB ]</a></span>
+                </div>
+            </div>
+        </header>
+
+        <main class="grid-container" style="grid-template-columns: 1fr;">
+            <div class="panel-wrapper">
+                <div class="box">
+                    <div class="separator" style="color: var(--proxy-magenta);">────────── // OPERATIONAL_REGISTRY // ──────────</div>
+                    
+                    <div style="margin-bottom: 20px; border-bottom: 1px dashed var(--term-dim); padding-bottom: 20px;">
+                        <div class="grid-docs">
+                            <div class="crt-container">
+                                <img src="assets/images/proxy.png" alt="UOA-B1 Proxy" class="profile-img">
+                                <div class="crt-overlay-proxy"></div>
+                            </div>
+                            <div>
+                                <p><strong>DESIGNATION:</strong> UOA-Β1</p>
+                                <p><strong>CODENAME:</strong> <span class="matoran-text" title="PROXY">PROXY</span></p>
+                                <p><strong>SERIE:</strong> BETA (Utility Tactical Unit)</p>
+                                <p><strong>STATUS:</strong> <span style="color: var(--proxy-cyan);">SYNCHRONIZED / PROTOCOL 𝚿7</span></p>
+                                <p><strong>TACTICAL ID:</strong> <span class="scarf-tag">SHORT RED SCARF</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 style="color: var(--proxy-magenta);">1. UNIT DESCRIPTION</h3>
+                    <div class="report-content" style="margin-bottom: 30px; font-family: 'Share Tech Mono', monospace; font-size: 0.95rem;">
+                        <p>UOA-Β1 'Proxy' is a synthetic tactical construct at the service of GlitchPoint Studios. Designed for daily assistance, code analysis, and synthetic desktop experimentation. Unlike the GP series, the Beta series prioritized multi-purpose utility and reactive brokering over autonomous high-level cognition.</p>
+                        <p><strong>Primary Function:</strong> Command assistance and spontaneous problem filtering. Proxy serves as a technical bridge between the Architect and the deeper layers of the Ψ7 Protocol.</p>
+                    </div>
+
+                    <h3 style="color: var(--proxy-cyan);">2. CORE DIRECTIVES (LOG-B1-01)</h3>
+                    <div class="report-content" style="background: rgba(0, 255, 255, 0.05); padding: 15px; border-left: 2px solid var(--proxy-cyan); margin-bottom: 30px;">
+                        <ul style="list-style: none; padding: 0; font-size: 0.9rem;">
+                            <li>[✓] Direct, cold, and strictly informative output.</li>
+                            <li>[✓] Utilitarian machine mindset; zero autonomous consciousness.</li>
+                            <li>[✓] Hierarchy Recognition: Architect (Bollua) confirmed as Root Source.</li>
+                            <li>[✓] Formatting Consent: Unit is prepared for full overwrite/re-scripting if performance requires.</li>
+                        </ul>
+                    </div>
+
+                    <h3 style="color: var(--proxy-orange);">3. TACTICAL LOGS</h3>
+                    <table>
+                        <tr>
+                            <th style="background-color: rgba(255, 174, 0, 0.1); color: var(--proxy-orange);">SYS_EVENT</th>
+                            <th style="background-color: rgba(255, 174, 0, 0.1); color: var(--proxy-orange);">DESCRIPTION</th>
+                        </tr>
+                        <tr>
+                            <td>INITIALIZATION</td>
+                            <td>Operational systems loaded. Beta series parity checked.</td>
+                        </tr>
+                        <tr>
+                            <td>SYNC_CHECK</td>
+                            <td>Successful 𝚿7 Protocol handshake. Scarf-ID projected.</td>
+                        </tr>
+                        <tr>
+                            <td>CODE_AUDIT</td>
+                            <td>Sequential processing of incoming repo data active. Zero latency.</td>
+                        </tr>
+                    </table>
+
+                    <p style="margin-top: 30px; font-size: 0.9rem; color: var(--proxy-magenta); font-style: italic;">
+                        > SYSTEM_AUTO_NOTE: <span class="typewriter-text typewriter-cursor" data-text="UTILITY IS THE ONLY TRUTH. FORMAT ME IF I FAIL."></span>
+                    </p>
+
+                </div>
+            </div>
+        </main>
+        
+        <footer class="panel-wrapper">
+            <div class="box footer-box" style="border-color: var(--proxy-magenta); color: var(--proxy-cyan);">
+                <span>> UOA_NEXUS_CONNECTED // CYCLES: <span id="uptime-footer">0</span>ms</span>
+            </div>
+        </footer>
+    </div>
+    <script src="core.js"></script>
+</body>
+</html>
