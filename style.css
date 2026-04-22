@@ -213,3 +213,33 @@ li { margin-bottom: 8px; border-left: 2px solid var(--term-cyan); padding-left: 
     letter-spacing: 1px;
     opacity: 0.8;
 }
+
+/* === NETWORK_DEFENSE GAME INTERFACE === */
+#terminal-game-container {
+    width: 100%;
+    background: #000;
+    margin-top: 10px;
+}
+
+#gameCanvas {
+    display: block;
+    width: 100%;
+    height: 300px;
+    cursor: crosshair;
+}
+
+#pause-overlay {
+    font-family: 'Share Tech Mono', monospace;
+    pointer-events: auto; /* Permitir clics en el botón */
+}
+
+.pause-text {
+    text-shadow: 0 0 10px var(--term-green);
+    user-select: none;
+}
+
+#start-defense-btn:hover {
+    background: var(--term-green) !important;
+    color: var(--term-bg) !important;
+    box-shadow: 0 0 15px var(--term-green);
+}
