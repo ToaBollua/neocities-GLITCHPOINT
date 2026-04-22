@@ -231,6 +231,7 @@ li { margin-bottom: 8px; border-left: 2px solid var(--term-cyan); padding-left: 
 #pause-overlay {
     font-family: 'Share Tech Mono', monospace;
     pointer-events: auto; /* Permitir clics en el botón */
+    clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
 }
 
 .pause-text {
