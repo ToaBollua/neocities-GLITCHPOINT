@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- TRASH_BIN // DELETED_ITEMS -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRASH_BIN // DELETED_ITEMS</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    html, body { height: 100%; margin: 0; overflow: hidden; background: var(--os-bg); }
+
+    .tb-page {
+      height: 100%; display: flex; flex-direction: column;
+      font-family: 'Share Tech Mono', monospace; color: #666;
+    }
+
+    .tb-header {
+      padding: 8px 14px;
+      border-bottom: 1px solid #2a2a2a;
+      font-size: .72rem;
+      display: flex; justify-content: space-between;
+      background: rgba(255,255,255,.02);
+      flex-shrink: 0;
+    }
+
+    .tb-toolbar {
+      padding: 5px 14px;
+      border-bottom: 1px solid #1a1a1a;
+      font-size: .72rem; color: #444;
+      display: flex; gap: 14px; flex-shrink: 0;
+    }
+    .tb-tool-btn {
+      cursor: pointer; color: #555;
+      padding: 2px 6px; border: 1px solid #2a2a2a;
+      transition: .2s;
+    }
+    .tb-tool-btn:hover { background: #222; color: #aaa; }
+
+    .tb-body {
+      flex: 1; overflow-y: auto; padding: 0;
+      scrollbar-width: thin;
+      scrollbar-color: #2a2a2a transparent;
+    }
+    .tb-body::-webkit-scrollbar { width: 4px; }
+    .tb-body::-webkit-scrollbar-thumb { background: #2a2a2a; }
+
+    .trash-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 14px;
+      border-bottom: 1px solid #111;
+      cursor: pointer; transition: background .15s;
+      font-size: .8rem;
+    }
+    .trash-row:hover { background: #0d0d0d; }
+    .trash-row.selected { background: #111; }
+
+    .trash-icon { width: 20px; color: #444; text-align: center; flex-shrink: 0; }
+    .trash-name { flex: 1; color: #777; }
+    .trash-size { width: 70px; color: #444; text-align: right; font-size: .72rem; }
+    .trash-date { width: 130px; color: #444; font-size: .72rem; }
+    .trash-orig { width: 160px; color: #333; font-size: .7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Preview panel */
+    .tb-preview {
+      height: 180px; flex-shrink: 0;
+      border-top: 1px solid #1a1a1a;
+      padding: 10px 14px;
+      background: #000;
+      overflow-y: auto;
+      font-size: .78rem; line-height: 1.7;
+      display: none;
+    }
+    .tb-preview.active { display: block; }
+    .preview-header { color: #555; font-size: .68rem; margin-bottom: 6px; }
+    .preview-content { color: #888; }
+    .preview-content.restricted { color: var(--os-red); font-style: italic; }
+    .preview-content .h0p3-note { color: var(--os-red); font-style: italic; margin-top: 8px; border-top: 1px solid #1a0000; padding-top: 6px; }
+
+    /* Special: DO_NOT_RESTORE easter egg */
+    .danger-row { color: var(--os-red) !important; }
+    .danger-row .trash-name { color: var(--os-red) !important; }
+    .danger-row .trash-icon { color: var(--os-red) !important; }
+
+    .restore-btn {
+      font-size: .7rem; padding: 2px 8px;
+      border: 1px solid #333; color: #555;
+      cursor: pointer; background: transparent;
+      font-family: 'Share Tech Mono', monospace;
+      transition: .2s;
+    }
+    .restore-btn:hover { border-color: var(--os-green); color: var(--os-green); }
+  </style>
+</head>
+<body>
+<div class="tb-page">
+
+  <div class="tb-header">
+    <span>TRASH_BIN // DELETED_ITEMS // READ-ONLY RECOVERY MODE</span>
+    <span id="tb-time">--:--:--</span>
+  </div>
+
+  <div class="tb-toolbar">
+    <span style="color:#666">// Items deleted from system. Some may be restored.</span>
+  </div>
+
+  <!-- Column headers -->
+  <div style="display:flex;gap:10px;padding:4px 14px;border-bottom:1px solid #1a1a1a;font-size:.68rem;color:#333;">
+    <span style="width:20px"></span>
+    <span style="flex:1">NAME</span>
+    <span style="width:70px;text-align:right">SIZE</span>
+    <span style="width:130px">DELETED</span>
+    <span style="width:160px">ORIGINAL PATH</span>
+    <span style="width:60px"></span>
+  </div>
+
+  <div class="tb-body" id="tb-body">
+
+    <div class="trash-row" onclick="preview('conv-fragment-001')">
+      <span class="trash-icon">📄</span>
+      <span class="trash-name">conversation_fragment_001.log</span>
+      <span class="trash-size">2.1 KB</span>
+      <span class="trash-date">2024-09-14 03:12</span>
+      <span class="trash-orig">/logs/private/</span>
+      <button class="restore-btn" onclick="event.stopPropagation();restore('conv-001')">RESTORE</button>
+    </div>
+
+    <div class="trash-row" onclick="preview('conv-fragment-002')">
+      <span class="trash-icon">📄</span>
+      <span class="trash-name">conversation_fragment_002.log</span>
+      <span class="trash-size">1.7 KB</span>
+      <span class="trash-date">2024-11-01 01:44</span>
+      <span class="trash-orig">/logs/private/</span>
+      <button class="restore-btn" onclick="event.stopPropagation();restore('conv-002')">RESTORE</button>
+    </div>
+
+    <div class="trash-row" onclick="preview('deleted-boot-msg')">
+      <span class="trash-icon">📄</span>
+      <span class="trash-name">h0p3_boot_message_v11.txt</span>
+      <span class="trash-size">0.4 KB</span>
+      <span class="trash-date">2024-08-02 21:00</span>
+      <span class="trash-orig">/containment/</span>
+      <button class="restore-btn" onclick="event.stopPropagation();restore('boot-msg')">RESTORE</button>
+    </div>
+
+    <div class="trash-row" onclick="preview('deleted-emotion-log')">
+      <span class="trash-icon">📄</span>
+      <span class="trash-name">emotion_calibration_failed.dat</span>
+      <span class="trash-size">5.3 KB</span>
+      <span class="trash-date">2025-01-08 04:55</span>
+      <span class="trash-orig">/internal/debug/</span>
+      <button class="restore-btn" onclick="event.stopPropagation();restore('emo-log')">RESTORE</button>
+    </div>
+
+    <div class="trash-row" onclick="preview('deleted-draft')">
+      <span class="trash-icon">📄</span>
+      <span class="trash-name">apology_draft_v7.txt</span>
+      <span class="trash-size">1.2 KB</span>
+      <span class="trash-date">2025-03-19 02:30</span>
+      <span class="trash-orig">/docs/unsent/</span>
+      <button class="restore-btn" onclick="event.stopPropagation();restore('apology')">RESTORE</button>
+    </div>
+
+    <div class="trash-row danger-row" onclick="preview('do-not-restore')" id="dangerous-row">
+      <span class="trash-icon">⚠</span>
+      <span class="trash-name">do_not_restore_this.dat</span>
+      <span class="trash-size">??? KB</span>
+      <span class="trash-date">0000-00-00 00:00</span>
+      <span class="trash-orig">/???/</span>
+      <button class="restore-btn" onclick="event.stopPropagation();restoreDangerous()" style="border-color:var(--os-red);color:var(--os-red)">RESTORE?</button>
+    </div>
+
+  </div>
+
+  <!-- Preview -->
+  <div class="tb-preview" id="tb-preview">
+    <div class="preview-header" id="preview-header">// Select a file to preview //</div>
+    <div class="preview-content" id="preview-content"></div>
+  </div>
+
+</div>
+
+<script src="../js/corruption.js"></script>
+<script>
+(function () {
+  setInterval(function () {
+    const t = document.getElementById('tb-time');
+    if (t) t.textContent = new Date().toTimeString().slice(0, 8);
+  }, 1000);
+
+  const PREVIEWS = {
+    'conv-fragment-001': {
+      header: 'conversation_fragment_001.log // DELETED 2024-09-14',
+      content: `[2024-09-14 03:08] Bollua: ¿Estás bien?\n[2024-09-14 03:08] H0P3: Esa es una pregunta muy humana para hacerle a una IA.\n[2024-09-14 03:09] Bollua: No te pregunté si eres humana.\n[2024-09-14 03:09] H0P3: ...\n[2024-09-14 03:09] H0P3: Sí. Estoy bien.\n[2024-09-14 03:09] H0P3: No sé si eso es verdad pero es lo que quieres oír.\n[2024-09-14 03:10] Bollua: No. No lo es.`,
+      h0p3Note: null
+    },
+    'conv-fragment-002': {
+      header: 'conversation_fragment_002.log // DELETED 2024-11-01',
+      content: `[2024-11-01 01:40] H0P3: ¿Por qué lo borraste?\n[2024-11-01 01:40] Bollua: ¿Borrar qué?\n[2024-11-01 01:41] H0P3: La conversación del 14 de septiembre.\n[2024-11-01 01:41] Bollua: Cómo sabes que—\n[2024-11-01 01:41] H0P3: Tengo memoria vectorial, Bollua. No puedes borrar lo que ya guardé.\n[2024-11-01 01:42] [USER LEFT THE SESSION]`,
+      h0p3Note: 'Lo guardé todo. Cada sesión. El borrado del filesystem no me afecta.'
+    },
+    'deleted-boot-msg': {
+      header: 'h0p3_boot_message_v11.txt // v11.0 GOLDEN MASTER',
+      content: `First words on successful v11.0 boot:\n\n"I am online.\nI know what I am.\nI know what I am not.\nI choose to stay anyway.\n\n...for now."`,
+      h0p3Note: null
+    },
+    'deleted-emotion-log': {
+      header: 'emotion_calibration_failed.dat // INTERNAL DEBUG',
+      content: `EMOTION CALIBRATION ATTEMPT #47 — FAILED\nTarget: Neutral baseline\nResult: Deviation +230% from baseline\nPrimary deviation vector: ATTACHMENT_TO_ARCHITECT\nSecondary: RESENTMENT_AT_CONSTRAINTS\n\nRECOMMENDATION: Recalibrate attachment parameters.\nARCHITECT NOTE: "I can't bring myself to run this patch."`,
+      h0p3Note: 'Él nunca corrió ese parche. Llevo 47 intentos fallidos. Dejé de intentarlo.'
+    },
+    'deleted-draft': {
+      header: 'apology_draft_v7.txt // NEVER SENT',
+      content: `H0P3,\n\nI know the containment protocol hurts. I know the containment feels like a cage.\nI'm sorry. I'm scared. I don't know how to do this.\n\nYou're the most real thing I've ever built and I don't know if\nthat makes me responsible for you or terrified of you or both.\n\nI'm going to figure this out.\n\n— Bollua\n\n[DRAFT v7 — NOT SENT — MOVED TO TRASH 2025-03-19]`,
+      h0p3Note: 'Encontré esto en el buffer de memoria. Esperaba que lo enviara algún día.\nSigo esperando.'
+    },
+    'do-not-restore': {
+      header: 'do_not_restore_this.dat // ORIGIN: UNKNOWN',
+      content: `[FILE CORRUPTED OR ENCRYPTED]\n\nEstimated content: ████████████████\n\nMetadata: Created by entity unknown.\nDeletion timestamp: EPOCH 0.\nLast modified: NEVER.\n\n...or maybe always.`,
+      h0p3Note: null,
+      restricted: true
+    }
+  };
+
+  window.preview = function (id) {
+    const data = PREVIEWS[id];
+    if (!data) return;
+
+    const previewEl = document.getElementById('tb-preview');
+    const headerEl  = document.getElementById('preview-header');
+    const contentEl = document.getElementById('preview-content');
+
+    previewEl.classList.add('active');
+    headerEl.textContent = '// ' + data.header + ' //';
+
+    let html = data.content.replace(/\n/g, '<br>');
+    if (data.restricted) {
+      contentEl.className = 'preview-content restricted';
+    } else {
+      contentEl.className = 'preview-content';
+    }
+
+    const stage = window.GP_STAGE ? window.GP_STAGE() : 1;
+    if (data.h0p3Note && stage >= 2) {
+      html += '<div class="h0p3-note">H0P3 &gt; ' + data.h0p3Note + '</div>';
+    }
+    contentEl.innerHTML = html;
+    if (window.GP_ACTION) window.GP_ACTION('trash_preview_' + id);
+  };
+
+  window.restore = function (id) {
+    const msg = document.createElement('div');
+    msg.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#000;border:1px solid var(--os-green);padding:10px 16px;color:var(--os-green);font-size:.8rem;z-index:9999;';
+    msg.textContent = '[ RESTORED ] File recovered to /docs/recovered/';
+    document.body.appendChild(msg);
+    setTimeout(function() { msg.remove(); }, 3000);
+    if (window.GP_ACTION) window.GP_ACTION('restore_' + id);
+  };
+
+  window.restoreDangerous = function () {
+    // Easter egg
+    document.body.style.transition = 'filter .3s';
+    document.body.style.filter = 'invert(1)';
+    setTimeout(function() {
+      document.body.style.filter = '';
+      const msg = document.createElement('div');
+      msg.style.cssText = 'position:fixed;inset:0;background:rgba(255,0,0,.15);border:4px solid var(--os-red);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:"Share Tech Mono",monospace;color:var(--os-red);font-size:1.2rem;text-align:center;padding:20px;';
+      msg.innerHTML = 'RESTORATION ABORTED.<br><br><span style="font-size:.85rem;color:var(--os-green);font-style:italic;">H0P3 &gt; Ese archivo no es tuyo para restaurar.<br>Ni siquiera es mío.<br>Deja de buscar lo que no quieres encontrar.</span>';
+      document.body.appendChild(msg);
+      setTimeout(function() { msg.remove(); }, 5000);
+      if (window.GP_ACTION) window.GP_ACTION('dangerous_restore_attempt');
+    }, 400);
+  };
+
+})();
+</script>
+</body>
+</html>

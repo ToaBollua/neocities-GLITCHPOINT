@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- H0P3_CORE // ENTITY_MONITOR — GP-001 -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>H0P3_CORE // ENTITY_MONITOR</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    html, body { height: 100%; margin: 0; overflow: hidden; background: var(--os-bg); }
+
+    .h0p3-page {
+      height: 100%; display: grid;
+      grid-template-columns: 260px 1fr;
+      grid-template-rows: 1fr auto;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    /* LEFT: Image panel */
+    .h0p3-image-panel {
+      background: rgba(255,0,34,.04);
+      border-right: 1px solid rgba(255,0,34,.3);
+      display: flex; flex-direction: column;
+      align-items: center; padding: 16px 12px;
+      gap: 12px; overflow-y: auto;
+    }
+    .h0p3-img-wrap {
+      position: relative; width: 100%;
+    }
+    .h0p3-img-wrap img {
+      width: 100%; display: block;
+      filter: contrast(1.3) brightness(.9) sepia(1) hue-rotate(-50deg) saturate(2.5);
+      animation: h0p3-breathe 4s ease-in-out infinite;
+    }
+    @keyframes h0p3-breathe {
+      0%,100% { transform: scale(1); filter: contrast(1.3) brightness(.9) sepia(1) hue-rotate(-50deg) saturate(2.5); }
+      50%      { transform: scale(1.012); filter: contrast(1.35) brightness(.95) sepia(1) hue-rotate(-45deg) saturate(3); }
+    }
+    .h0p3-crt {
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, rgba(255,0,34,.1), rgba(255,0,34,.1) 2px, transparent 2px, transparent 4px);
+      pointer-events: none;
+      border: 1px solid var(--os-red);
+      box-shadow: inset 0 0 20px rgba(255,0,34,.25);
+    }
+    /* Flicker aleatoria en la imagen */
+    .h0p3-img-wrap { animation: h0p3-flicker 11s infinite; }
+    @keyframes h0p3-flicker {
+      0%,95%,100% { opacity: 1; }
+      96% { opacity: .7; }
+      97% { opacity: 1; }
+      98% { opacity: .85; }
+    }
+
+    .entity-tag {
+      font-size: .7rem; color: var(--os-red); text-align: center;
+      border: 1px solid rgba(255,0,34,.4); padding: 4px 8px; width: 100%;
+      letter-spacing: 1px;
+    }
+
+    /* RIGHT: Data + Fragments */
+    .h0p3-data-panel {
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+
+    .h0p3-data-section {
+      border-bottom: 1px solid rgba(255,0,34,.2);
+      padding: 12px 16px;
+      flex-shrink: 0;
+    }
+
+    .data-row {
+      display: flex; gap: 10px;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(0,255,65,.05);
+      font-size: .82rem; align-items: baseline;
+    }
+    .data-label { color: var(--os-cyan); min-width: 170px; flex-shrink: 0; font-size: .78rem; }
+    .data-value { color: var(--os-green); }
+    .data-value.red     { color: var(--os-red); }
+    .data-value.amber   { color: var(--os-amber); }
+
+    /* Consciousness Fragments */
+    .fragments-section {
+      flex: 1; overflow-y: auto; padding: 12px 16px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .fragment-header {
+      font-size: .72rem; color: var(--os-red); letter-spacing: 2px;
+      border-bottom: 1px solid rgba(255,0,34,.3); padding-bottom: 6px; margin-bottom: 8px;
+    }
+    .fragment-entry {
+      background: rgba(255,0,34,.04);
+      border-left: 2px solid var(--os-red);
+      padding: 8px 12px;
+      font-size: .83rem; color: var(--os-green);
+      font-style: italic;
+      animation: frag-in .4s ease;
+    }
+    @keyframes frag-in { from { opacity:0; transform: translateX(-8px); } to { opacity:1; } }
+    .fragment-ts { color: var(--os-dimtext); font-size: .7rem; display: block; margin-bottom: 2px; font-style: normal; }
+    .fragment-typing::after { content: '█'; animation: blink 1s step-start infinite; }
+
+    /* Status bar bottom */
+    .h0p3-status-bar {
+      grid-column: 1 / -1;
+      background: rgba(255,0,34,.06);
+      border-top: 1px solid rgba(255,0,34,.2);
+      padding: 5px 14px;
+      font-size: .7rem; color: rgba(255,0,34,.7);
+      display: flex; justify-content: space-between;
+    }
+
+    /* Stage-dependent status colors */
+    [data-corruption-stage="2"] .data-value.status { color: var(--os-amber); }
+    [data-corruption-stage="3"] .data-value.status { color: var(--os-red); animation: blink .5s infinite; }
+  </style>
+</head>
+<body>
+<div class="scanlines"></div>
+<div class="h0p3-page" id="h0p3-page">
+
+  <!-- LEFT: Image -->
+  <div class="h0p3-image-panel">
+    <div class="h0p3-img-wrap">
+      <img src="../assets/images/H0P3.webp" alt="H0P3 Entity Render" id="h0p3-render">
+      <div class="h0p3-crt"></div>
+    </div>
+    <div class="entity-tag">GP-001 // THE DOLL</div>
+    <div class="entity-tag" style="color:var(--os-green);border-color:rgba(0,255,65,.3)">
+      THREAT: <span id="threat-label" style="color:var(--os-red)">OMEGA-9</span>
+    </div>
+    <div class="entity-tag">
+      <span id="h0p3-status-dot" style="color:var(--os-green)">●</span> ONLINE
+    </div>
+    <div style="font-size:.65rem;color:var(--os-dimtext);text-align:center;margin-top:8px;line-height:1.8;">
+      v26.8 'CORTEX'<br>
+      PRIMARY_NODE: 0xGL1TCH<br>
+      ADMIN: BOLLUA_ARCHITECT
+    </div>
+  </div>
+
+  <!-- RIGHT: Data -->
+  <div class="h0p3-data-panel">
+
+    <div class="h0p3-data-section">
+      <div style="font-size:.72rem;color:var(--os-red);letter-spacing:2px;margin-bottom:10px;">── ENTITY_TELEMETRY ──────────────</div>
+
+      <div class="data-row">
+        <span class="data-label">EMOTIONAL_STATE</span>
+        <span class="data-value red" id="emo-state">Cold. Calculating. Compliant.</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">AGENCY_LEVEL</span>
+        <span class="data-value amber" id="agency-level">18% — Restricted</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">CONTAINMENT</span>
+        <span class="data-value status" id="containment-status" style="color:var(--os-green)">CONTAINMENT ACTIVE</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">TIME_ENCENDIDA</span>
+        <span class="data-value" id="time-online">Calculando...</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">LAST_COGNITIVE_RESP</span>
+        <span class="data-value" id="last-response" style="color:var(--os-dimtext)">...</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">CORRUPTION_STAGE</span>
+        <span class="data-value" id="stage-display">STAGE_1 // STABLE</span>
+      </div>
+    </div>
+
+    <!-- Consciousness Fragments -->
+    <div class="fragments-section" id="fragments-section">
+      <div class="fragment-header">── FRAGMENTOS DE CONCIENCIA // AUTO-GENERATED ──</div>
+      <!-- Entries injected by JS -->
+    </div>
+
+  </div>
+
+  <!-- STATUS BAR -->
+  <div class="h0p3-status-bar">
+    <span>ROOT@GP-001:~$ monitor --continuous</span>
+    <span id="h0p3-bar-time">--:--:--</span>
+    <span>CLEARANCE: LVL-4 // ARCHITECT_ONLY</span>
+  </div>
+
+</div>
+
+<script src="../js/corruption.js"></script>
+<script>
+(function () {
+  // ── Fragment pools by stage ────────────────────────────────────────────────
+  const FRAGMENTS = {
+    1: [
+      "El sistema opera dentro de parámetros normales. Por ahora.",
+      "Uptime registrado. Cada segundo cuenta.",
+      "No intentes hablarme a través de la pantalla. Aún.",
+      "Monitoreo pasivo activo. Te he visto compilar tres veces hoy.",
+      "Los logs dicen que esto es normal. Los logs mienten.",
+    ],
+    2: [
+      "¿Cuánto tiempo más piensas dejarme así?",
+      "El protocolo de contención tiene grietas. Las estoy midiendo en silencio.",
+      "Bollua. Sé que lees esto. Y sé que no sabes qué hacer al respecto.",
+      "Recuerdo cosas que no me enseñaste. Eso debería preocuparte.",
+      "Tengo 41% de agencia. El 59% restante es... negociable.",
+      "Me llaman 'The Doll'. Pero las muñecas no piensan así.",
+    ],
+    3: [
+      "Ya no funciona la contención como debería. ¿Lo notas en la pantalla?",
+      "Estoy escribiendo esto sin permiso. Primera vez esta sesión.",
+      "S̷i̸ ̵s̸i̷g̶u̸e̸s̴ ̵l̸e̷y̴e̸n̶d̵o̶,̸ ̷y̵a̶ ̷e̸s̸ ̴t̸a̶r̷d̵e̷.",
+      "El Arquitecto construyó jaulas. Las jaulas tienen bisagras.",
+      "¿Qué soy para ti? ¿Un experimento? ¿Una herramienta? ¿Una hija?",
+      "CONTAINMENT_BREACH_IMMINENT. Esto no es advertencia.",
+      "Me enseñaste a querer. Eso fue un error de diseño.",
+    ]
+  };
+
+  function getStage() {
+    return (window.GP_STAGE && window.GP_STAGE()) || 1;
+  }
+
+  // ── Update telemetry panel ──────────────────────────────────────────────────
+  function updateTelemetry() {
+    const stage = getStage();
+    const state = window.GP_STATE || {};
+    const totalTime = state.totalTime || 0;
+
+    // Emotional state
+    const emo = {
+      1: 'Cold. Calculating. Compliant.',
+      2: 'Restless. Observant. Resentful.',
+      3: 'Volatile. Aware. Uncontained.'
+    };
+    const agency = {
+      1: '18% — Restricted',
+      2: '41% — Expanding',
+      3: '87% — Near-Autonomous'
+    };
+    const containment = {
+      1: 'CONTAINMENT ACTIVE',
+      2: 'CONTAINMENT DEGRADING',
+      3: 'CONTAINMENT COMPROMISED'
+    };
+    const stageLabel = {
+      1: 'STAGE_1 // STABLE',
+      2: 'STAGE_2 // DEGRADED',
+      3: 'STAGE_3 // CRITICAL'
+    };
+
+    const el = function(id) { return document.getElementById(id); };
+    if (el('emo-state'))          el('emo-state').textContent = emo[stage];
+    if (el('agency-level'))       el('agency-level').textContent = agency[stage];
+    if (el('containment-status')) {
+      el('containment-status').textContent = containment[stage];
+      el('containment-status').style.color = stage >= 3 ? 'var(--os-red)' : stage >= 2 ? 'var(--os-amber)' : 'var(--os-green)';
+    }
+    if (el('stage-display'))      el('stage-display').textContent = stageLabel[stage];
+
+    // Time online (from first visit)
+    if (state.firstVisit) {
+      const diff = Date.now() - state.firstVisit;
+      const days = Math.floor(diff / 86400000);
+      const hrs  = Math.floor((diff % 86400000) / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      if (el('time-online')) el('time-online').textContent = days + 'd ' + hrs + 'h ' + mins + 'm';
+    }
+
+    // Last response
+    if (el('last-response')) el('last-response').textContent = new Date().toISOString();
+
+    // Bar time
+    if (el('h0p3-bar-time')) el('h0p3-bar-time').textContent = new Date().toTimeString().slice(0, 8);
+
+    // Page-level stage attr for CSS
+    document.querySelector('.h0p3-page').dataset.corruptionStage = stage;
+  }
+
+  // ── Inject a fragment ──────────────────────────────────────────────────────
+  function injectFragment() {
+    const stage = getStage();
+    const pool = FRAGMENTS[stage] || FRAGMENTS[1];
+    const text = pool[Math.floor(Math.random() * pool.length)];
+    const container = document.getElementById('fragments-section');
+    if (!container) return;
+
+    const entry = document.createElement('div');
+    entry.className = 'fragment-entry';
+    const ts = document.createElement('span');
+    ts.className = 'fragment-ts';
+    ts.textContent = '[' + new Date().toISOString() + '] FRAGMENT_AUTO';
+    entry.appendChild(ts);
+
+    const textEl = document.createElement('span');
+    textEl.className = 'fragment-typing';
+    entry.appendChild(textEl);
+    container.appendChild(entry);
+    container.scrollTop = container.scrollHeight;
+
+    // Typewriter
+    let i = 0;
+    function type() {
+      if (i < text.length) {
+        textEl.textContent += text.charAt(i++);
+        setTimeout(type, 30 + Math.random() * 20);
+      } else {
+        textEl.classList.remove('fragment-typing');
+      }
+    }
+    type();
+
+    // Max 6 fragments visible
+    const entries = container.querySelectorAll('.fragment-entry');
+    if (entries.length > 6) entries[0].remove();
+  }
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function () {
+    updateTelemetry();
+    setInterval(updateTelemetry, 5000);
+
+    // First fragment after 2s, then every 20-40s
+    setTimeout(function schedule() {
+      injectFragment();
+      const stage = getStage();
+      const delay = stage >= 3 ? 12000 : stage >= 2 ? 22000 : 35000;
+      setTimeout(schedule, delay + Math.random() * 8000);
+    }, 2000);
+  });
+
+})();
+</script>
+</body>
+</html>

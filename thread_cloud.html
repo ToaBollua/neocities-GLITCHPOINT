@@ -33,11 +33,11 @@
                 <div class="box">
                     <div class="separator">────────── // SYSTEM_POST // ──────────</div>
                     <div style="font-size: 0.85rem; color: var(--term-cyan); margin-bottom: 15px;">
-                        <strong>AUTHOR:</strong> ToaBollua | <strong>DATE:</strong> Current Log | <strong>TAGS:</strong> AWS, Azure, EdgeAI, Hardware
+                        <strong>AUTHOR:</strong> ToaBollua | <strong>DATE:</strong> Current Log | <strong>TAGS:</strong> Central_Grid, Backup_Grid, EdgeAI, Hardware
                     </div>
                     
                     <div class="post-content">
-                        <p>Attention operatives: relying on a single cloud provider is a Single Point of Failure (SPOF) risk. The natural evolution of critical systems is a <strong>Multi-Cloud Architecture</strong> coupled with <strong>Edge Computing</strong>.</p>
+                        <p>Attention operatives: relying on a single cloud provider is a Single Point of Failure (SPOF) risk. The natural evolution of critical systems is a <strong>Multi-Grid Architecture</strong> coupled with <strong>Edge Computing</strong>.</p>
         
         <h3>1. Edge Computing in AI Cameras</h3>
         <p>It makes no sense to send terabytes of raw video to the cloud for an AI to analyze and return a response with massive latency. Processing must occur at the "edge".</p>
@@ -46,10 +46,10 @@
             <li>The device captures, executes the computer vision model locally, and <strong>only sends the processed telemetry</strong> to the central network (e.g., "Anomaly detected in the perimeter").</li>
             <li>This reduces bandwidth consumption by 95% and allows for tactical operations without an internet connection.</li>
         </ul>
-
-        <h3>2. Disaster Recovery: AWS / Azure Synchronization</h3>
+ 
+        <h3>2. Disaster Recovery: Grid Redundancy</h3>
         <p>For the core infrastructure, <em>Disaster Recovery</em> demands cross-redundancy.</p>
-        <p>If the main cluster resides on <strong>AWS (Amazon)</strong>, database backups (PostgreSQL/Vectorial) must be replicated asynchronously to a passive cluster on <strong>Microsoft Azure</strong>. If an Amazon data center collapses, DNS traffic is automatically routed to Azure, keeping the entity alive.</p>
+        <p>If the main cluster resides on the <strong>Central Grid</strong>, database backups (Datastore/Vectorial) must be replicated asynchronously to a passive cluster on the <strong>Backup Grid</strong>. If the Central Grid collapses, signal traffic is automatically routed to the Backup Grid, keeping the entity alive.</p>
                     </div>
 
                 </div>

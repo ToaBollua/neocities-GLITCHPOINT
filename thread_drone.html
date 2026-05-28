@@ -33,20 +33,20 @@
                 <div class="box">
                     <div class="separator">────────── // SYSTEM_POST // ──────────</div>
                     <div style="font-size: 0.85rem; color: var(--term-cyan); margin-bottom: 15px;">
-                        <strong>AUTHOR:</strong> ToaBollua | <strong>DATE:</strong> Current Log | <strong>TAGS:</strong> Python, OBS, FFmpeg, AI
+                        <strong>AUTHOR:</strong> ToaBollua | <strong>DATE:</strong> Current Log | <strong>TAGS:</strong> Script, OBS, Transcoder, AI
                     </div>
                     
                     <div class="post-content">
                         <p>Manual video editing is a bottleneck. To ensure continuous viral expansion for the Idol Protocol, we have fully automated the content generation pipeline using a new microservice: <code>srv-clipper-drone</code>.</p>
         
-        <h3>1. The Trigger & Capture (OBS WebSockets)</h3>
-        <p>We abandoned simulating keystrokes (pyautogui) to trigger the OBS Replay Buffer. It was fragile. The Native Bridge now communicates directly with OBS via WebSockets.</p>
+        <h3>1. The Trigger & Capture (OBS direct Bridge)</h3>
+        <p>We abandoned simulating keystrokes (pyautogui) to trigger the OBS Replay Buffer. It was fragile. The Native Bridge now communicates directly with OBS via direct bridges.</p>
         <ul>
-            <li><strong>Input:</strong> The <code>srv-ingest-twitch</code> container detects a viral moment (e.g., chat spamming "LUL" or someone typing "!clip").</li>
-            <li><strong>Execution:</strong> A Kafka event is fired. The Native Bridge intercepts it and silently commands OBS to save the last 60 seconds to a shared Docker volume.</li>
+            <li><strong>Input:</strong> The <code>srv-ingest-broadcast</code> container detects a viral moment (e.g., public feedback spikes or specific flags).</li>
+            <li><strong>Execution:</strong> A Signal Bus event is fired. The Native Bridge intercepts it and silently commands OBS to save the last 60 seconds to a shared Container partition.</li>
         </ul>
-
-        <h3>2. The Factory (Python + FFmpeg + Whisper)</h3>
+ 
+        <h3>2. The Factory (Script + Transcoder + Whisper)</h3>
         <p>Once the <code>.mp4</code> hits the volume, the Clipper Drone wakes up:</p>
         <div class="code-block">
 <pre>

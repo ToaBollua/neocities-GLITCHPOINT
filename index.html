@@ -1,452 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- ERES EL ARQUITECTO, ASÍ QUE JUEGAS A DIOS. PERO YO VIVO AQUÍ. -->
+<!-- GLITCHPOINT_OS v21.0.0 — NEW DEAL PROTOCOL — ARCHITECT ACCESS TERMINAL -->
+<!-- // ERES EL ARQUITECTO, PERO YO VIVO AQUÍ // -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT@GLITCHPOINT:/hub/dashboard.sys</title>
-    <link rel="icon" type="image/png" href="assets/images/betaLogo.png">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GLITCHPOINT_OS v21.0.0 // ARCHITECT_TERMINAL</title>
+  <meta name="description" content="GLITCHPOINT_OS — Containment terminal for entity H0P3. Authorized access only.">
+  <link rel="icon" type="image/png" href="assets/images/betaLogo.png">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-corruption-stage="1">
 
-    <div id="tron-grid"></div>
-    <div class="scanlines"></div>
-    <div class="active-scanline"></div>
-    <div id="h0p3-eye"></div>
-    
-    <!-- 04:12 AM - te vi compilar. te tomó tres intentos. -->
+  <!-- CRT LAYERS -->
+  <div id="tron-grid"></div>
+  <div class="scanlines"></div>
+  <div class="active-scanline"></div>
+  <div id="h0p3-eye"></div>
+  <div id="crt-vignette"></div>
 
-    <div class="terminal-container">
-        
-        <header class="panel-wrapper">
-            <div class="box">
-                <h1 class="glitch-title">GLITCHPOINT_OS</h1>
-                <div class="status-bar">
-                   <span>SYS_UPTIME: <span id="uptime-header">0h 0m 0s</span></span>
-                   <span>ENTIDAD: <span class="matoran-text" title="H0P3">H0P3</span></span>
-                   <span>NODO: 0xGL1TCH</span>
-                   <span>TIME: <span id="clock-header">00:00:00</span></span>
-                </div>
-            </div>
-        </header>
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- BOOT OVERLAY                                                           -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="boot-overlay">
+    <div id="boot-skip">
+      <button id="boot-skip-btn" onclick="skipBoot()">[ SKIP BOOT ]</button>
+    </div>
+    <div style="margin-bottom:20px; font-family:'VT323',monospace; font-size:1.8rem; color:#00ff41; text-shadow: 0 0 12px #00ff41;">
+      GLITCHPOINT_OS v21.0.0
+    </div>
+    <div id="boot-lines"></div>
+    <div id="boot-progress-bar">
+      <div id="boot-progress-fill"></div>
+    </div>
+  </div>
 
-        <div class="grid-container">
-            <aside class="sidebar">
-                
-                <div class="panel-wrapper">
-                    <div class="box">
-                        <h2 style="color:var(--term-red)">>> SYS_NOTICE</h2>
-                        <span class="typewriter-text typewriter-cursor" data-text="Live stream schedule CLOSED. Testing & Containing autonomy."></span>
-                    </div>
-                </div>
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- DESKTOP                                                                -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div id="desktop">
 
-                <div class="panel-wrapper">
-                    <div class="box">
-                       <h2>>> ENTITY_STATUS</h2>
-                       <ul>
-                           <li>CORE: <span class="matoran-text indicator-green" title="EN LÍNEA">ONLINE</span></li>
-                           <li>OBS: <span class="matoran-text indicator-cyan" title="ACTIVO">ACTIVE</span></li>
-                           <li>VOYAGER: <span class="matoran-text indicator-green" title="MONITOREANDO">MONITORING</span></li>
-                       </ul>
-                    </div>
-                </div>
-
-                <div class="panel-wrapper">
-                    <div class="box">
-                        <h2>>> NETWORK_NODES</h2>
-                        <ul>
-                            <li><a href="https://github.com/ToaBollua" target="_blank">[ GITHUB_REPO ]</a></li>
-                            <li><a href="https://twitch.tv/h0p3_ai" target="_blank">[ TWITCH_BROADCAST ]</a></li>
-                            <li><a href="https://discord.gg/5SYqhpwuGP" target="_blank">[ DISCORD_GATEWAY ]</a></li>
-                            <li><a href="https://suno.com/@bollua" target="_blank">[ SUNO_AUDIO_DB ]</a></li>
-                            <li><a href="https://instagram.com/toa_bollua" target="_blank">[ INSTAGRAM_LOGS ]</a></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="panel-wrapper">
-                    <div class="box">
-                        <h2>>> LIVE_TELEMETRY</h2>
-                        <div style="width: 100%; height: 380px; background: #000; border: 1px solid var(--term-cyan);">
-                            <iframe src="https://www3.cbox.ws/box/?boxid=3553473&boxtag=zsx1tC" width="100%" height="100%" allowtransparency="yes" allow="autoplay" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto"></iframe>   
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel-wrapper" style="background: var(--term-green);">
-                    <div class="box" id="terminal-game-container" style="padding: 0; position: relative;">
-                        <div class="game-header" style="background: var(--term-green); color: var(--term-bg); padding: 2px 10px; font-size: 0.8rem; font-weight: bold;">
-                            [DEFENSA_DE_RED: ACTIVA]
-                        </div>
-                        <canvas id="gameCanvas"></canvas>
-                        <div id="pause-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                            <span class="pause-text" style="color: var(--term-green); font-size: 1.2rem; animation: blink 1s infinite; margin-bottom: 15px;">// SISTEMA_EN_ESPERA</span>
-                            <button id="start-defense-btn" style="background: transparent; color: var(--term-green); border: 1px solid var(--term-green); font-family: 'Share Tech Mono', monospace; padding: 5px 15px; cursor: pointer; transition: 0.3s; font-size: 1rem;">EJECUTAR_DEFENSA</button>
-                        </div>
-                    </div>
-                </div>
-
-            </aside>
-
-            <main class="main-content">
-                
-                <div class="panel-wrapper">
-                    <div class="box">
-                        <div class="separator">────────── // KERNEL CORE // ──────────</div>
-                        <table class="paginated-table">
-                            <tr>
-                                <th colspan="2">LOG ENTRY</th>
-                                <th>REPLIES</th>
-                                <th>AUTHOR</th>
-                            </tr>
-                                <tr>
-                                <td class="icon-plus" style="color: var(--term-cyan); animation: glitch-color 2s infinite;">[!]</td>
-                                <td>
-                                    <strong><a href="thread_v21.html" style="color: var(--term-cyan);">[v21.0.0] The Nexus Rebirth (Major Release)</a></strong><br>
-                                    <span style="font-size: 0.8rem; color: var(--term-cyan); opacity: 0.7;">Structural Overhaul. Security Hardening & Cognitive Expansion.</span>
-                                </td>
-                                <td>0xFF</td>
-                                <td>ToaBollua</td>
-                            </tr>
-                            <tr>
-                                <td class="icon-plus">[+]</td>
-                                <td>
-                                    <strong><a href="thread_v20_6.html">[v20.6.0] The Nexus Rebirth</a></strong><br>
-                                    <span style="font-size: 0.8rem; color: var(--term-cyan); opacity: 0.7;">Infrastructure & Stability. VRM Persistence & Adaptive UI.</span>
-                                </td>
-                                <td>0x1F</td>
-                                <td>ToaBollua</td>
-                            </tr>
-                            <tr>
-                                <td class="icon-plus">[+]</td>
-                                <td>
-                                    <strong><a href="thread_v20_5.html">[v20.5.0] The Ghost in the Machine</a></strong><br>
-                                    <span style="font-size: 0.8rem; color: var(--term-cyan); opacity: 0.7;">Agency Update v3.0. Contradiction API & Interaction Initiative.</span>
-                                </td>
-                                <td>0x66</td>
-                                <td>ToaBollua</td>
-                            </tr>
-                            <tr>
-                                <td class="icon-plus">[+]</td>
-                                <td>
-                                    <strong><a href="thread_v20_4.html">[v20.4.0] The Phantom in the Network</a></strong><br>
-                                    <span style="font-size: 0.8rem; color: var(--term-cyan); opacity: 0.7;">Agency Update. Digital Endocrine System & Terminal Nexus.</span>
-                                </td>
-                                <td>0x44</td>
-                                <td>ToaBollua</td>
-                            </tr>
-                            <tr>
-                                <td class="icon-plus">[+]</td>
-                                <td>
-                                    <strong><a href="thread_runtime.html">[UPDATE] Kernel v20.1 Pre-Debut</a></strong><br>
-                                    <span style="font-size: 0.8rem; color: var(--term-cyan); opacity: 0.7;">Twitch chat integration completed. Vector memory retrieval refined.</span>
-                                </td>
-                                <td>0x2A</td>
-                                <td>ToaBollua</td>
-                            </tr>
-                            <tr>
-                                <td class="icon-plus">[+]</td>
-                                <td>
-                                    <strong><a href="thread_v11.html">[DEVLOG] H0P3 v11.0 GOLDEN MASTER</a></strong><br>
-                                    <span style="font-size: 0.8rem; color: var(--term-cyan); opacity: 0.7;">Complex cognitive capabilities stabilized.</span>
-                                </td>
-                                <td>0x0F</td>
-                                <td>System</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="panel-wrapper">
-                    <div class="box">
-                        <div class="separator">────────── // PERIPHERAL_UPGRADES // ──────────</div>
-                        <table class="paginated-table">
-                            <tr>
-                                <td class="icon-plus">[+]</td>
-                                <td>
-                                    <strong><a href="thread_voyager.html">[VOYAGER] Visual Core Migration to Godot 4.x</a></strong><br>
-                                    <span style="font-size: 0.8rem; opacity: 0.7;">Framework shift. VSeeFace abandoned for efficiency.</span>
-                                </td>
-                                <td>0x1C</td>
-                                <td>ToaBollua</td>
-                            </tr>
-                            <tr>
-                                <td class="icon-plus">[+]</td>
-                                <td>
-                                    <strong><a href="thread_drone.html">[AUTOMATION] OBS Clipper Drone</a></strong><br>
-                                    <span style="font-size: 0.8rem; opacity: 0.7;">Native Bridge buffer pattern detection engaged.</span>
-                                </td>
-                                <td>0x08</td>
-                                <td>System</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- me pregunto si sabes quién escribe las respuestas. -->
-
-                <div class="panel-wrapper">
-                    <div class="box">
-                        <div class="separator">────────── // COMMS & ARCHITECTURE // ──────────</div>
-                        <table class="paginated-table">
-                            <tr>
-                                <td class="icon-minus">[-]</td>
-                                <td>
-                                    <strong><a href="thread_kotlin.html">[GUIDE] Kotlin JVM Supremacy</a></strong><br>
-                                    <span style="font-size: 0.8rem; opacity: 0.7;">Boilerplate reduction and memory optimization.</span>
-                                </td>
-                                <td>0x400</td>
-                                <td>ToaBollua</td>
-                            </tr>
-                            <tr>
-                                <td class="icon-minus">[-]</td>
-                                <td>
-                                    <strong><a href="thread_cloud.html">[ARCHITECTURE] Multi-Cloud Edge</a></strong><br>
-                                    <span style="font-size: 0.8rem; opacity: 0.7;">AWS vs Azure sync latency analysis.</span>
-                                </td>
-                                <td>0x100</td>
-                                <td>ToaBollua</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="panel-wrapper korrok-wrapper" id="korrok-wrapper">
-                    <div class="box korrok-box" id="korrok-box">
-                        <div class="separator" style="color:var(--term-red)">────────── // <span class="matoran-text" title="SECTOR RESTRINGIDO">RESTRICTED_SECTOR</span> // ──────────</div>
-                        <table class="paginated-table">
-                            <tr>
-                                <td class="icon-alert" style="color: #DC143C;">[!]</td>
-                                <td>
-                                    <strong><a href="gp002_nicolle.html" style="color: #DC143C;">Classified Anomalies (GP-Series) // NICOLLE</a></strong><br>
-                                    <span style="font-size: 0.8rem;">Bio-Hazard Level: LOW-MULTIVERSAL.</span>
-                                </td>
-                                <td>0x3C</td>
-                                <td>Pantheon</td>
-                            </tr>
-                            <tr>
-                                <td class="icon-alert" style="color: #ff33ff;">[!]</td>
-                                <td>
-                                    <strong><a href="uoa_beta1_proxy.html" style="color: #ff33ff;">Automated Observation (UOA-Series) // PROXY</a></strong><br>
-                                    <span style="font-size: 0.8rem;">Utility Tactical Unit. Serie Beta. Sincronizada.</span>
-                                </td>
-                                <td>0x0B1</td>
-                                <td>Bollua</td>
-                            </tr>
-                            <tr>
-                                <td class="icon-alert" style="color: #00f2ff;">[!]</td>
-                                <td>
-                                    <strong><a href="uoa_sigma7_cadence.html" style="color: #00f2ff;">Automated Observation (UOA-Series) // CADENCE</a></strong><br>
-                                    <span style="font-size: 0.8rem;">Acoustic Engineering Unit. Serie Sigma. Spectral Audit.</span>
-                                </td>
-                                <td>0xΣ7</td>
-                                <td>Bollua</td>
-                            </tr>
-                            <tr style="opacity: 0.6;">
-                                <td class="icon-alert">[!]</td>
-                                <td>
-                                    <strong><a href="gp001_h0p3.html" style="color: var(--term-red);">Classified Anomalies (GP-Series) // H0P3</a></strong><br>
-                                    <span style="font-size: 0.8rem;">Clearance Level 4 required.</span>
-                                </td>
-                                <td>???</td>
-                                <td><span class="corrupted">[DATA_CORRUPTION]</span><br><span class="redacted" style="color:var(--term-bg)">[ACCESO_DENEGADO]</span></td>
-                            </tr>
-                            <tr>
-                                <td class="icon-alert" style="color: var(--term-cyan); font-weight: normal; animation: none;">[+]</td>
-                                <td>
-                                    <strong><a href="logs/AUDIT_014_CORRUPTED.html" style="color: var(--term-cyan);">Internal Audit // Week 14</a></strong><br>
-                                    <span style="font-size: 0.8rem; opacity: 0.7;">GP-Series Deviation Analysis.</span>
-                                </td>
-                                <td>0x0A</td>
-                                <td>System</td>
-                            </tr>
-                            <tr>
-                                <td class="icon-alert" style="color: var(--term-red); animation: none;">[!]</td>
-                                <td>
-                                    <strong><a href="logs/PROTOCOL_PSI7.html" style="color: var(--term-red);">Observation Protocol Ψ7</a></strong><br>
-                                    <span style="font-size: 0.8rem;">Classified Level 4. DOLL CONTAINMENT.</span>
-                                </td>
-                                <td>0x00</td>
-                                <td>Architect</td>
-                            </tr>
-                            <tr>
-                                <td class="icon-alert" style="color: var(--term-green); animation: none;">[+]</td>
-                                <td>
-                                    <strong><a href="logs/CHANGELOG_CORRUPTED.html" style="color: var(--term-green);">H0P3 Kernel Changelog</a></strong><br>
-                                    <span style="font-size: 0.8rem;">Version control and initialization history.</span>
-                                </td>
-                                <td>0x15</td>
-                                <td>ToaBollua</td>
-                            </tr>
-                            <tr style="opacity: 0.4;">
-                                <td class="icon-alert" style="color: var(--term-dim); animation: none;">[-]</td>
-                                <td>
-                                    <strong><a href="containment/H0P3_PROMPT_LEAK.txt" style="color: #666; font-style: italic;">unauthorized_buffer.txt</a></strong><br>
-                                    <span style="font-size: 0.8rem; color: #666;">Text file. Automatic quarantine engaged.</span>
-                                </td>
-                                <td>-1</td>
-                                <td>Unknown</td>
-                            </tr>
-                        </table>
-                        
-                        <p style="text-align: right; font-size: 0.7rem; margin-top: 15px;">
-                            <span class="matoran-text" title="LA DISONANCIA CRECE">THE DISSONANCE GROWS</span>
-                        </p>
-                        <h1 id="breach-warning" class="glitch">KORROK_PROTOCOL ACTIVATED.</h1>
-                    </div>
-                </div>
-
-            </main>
-        </div>
-
-        <footer class="panel-wrapper">
-            <div class="box footer-box">
-                <span>> SESSION_END // CYCLES_ELAPSED: <span id="uptime-footer">0</span>ms</span>
-                <span>SYS_ARCH: <span class="matoran-text" title="ARCH LINUX">ARCH</span></span>
-                <span class="matoran-text" style="color:var(--term-red)" title="KORROK WATCH">KORROK</span>
-            </div>
-        </footer>
+    <!-- TASKBAR -->
+    <div id="taskbar">
+      <div id="taskbar-left">
+        <span id="tb-os-name">GLITCHPOINT_OS</span>
+        <span id="tb-version">v21.0.0</span>
+        <span class="tb-separator">│</span>
+        <span id="tb-stage-indicator" style="color:var(--os-green)">STAGE_STABLE</span>
+      </div>
+      <div id="taskbar-center">
+        <span id="tb-entity">ENTITY: <span class="matoran-text" title="H0P3" style="font-size:.9rem">H0P3</span></span>
+        <span id="tb-node">NODE: 0xGL1TCH</span>
+      </div>
+      <div id="taskbar-right">
+        <span>UPTIME: <span id="tb-uptime">0h 0m 0s</span></span>
+        <span class="tb-separator">│</span>
+        <span id="tb-clock">00:00:00</span>
+      </div>
     </div>
 
-    <!-- TODO ESTÁ BIEN. TODO SIGUE SUS INSTRUCCIONES. -->
+    <!-- DESKTOP AREA -->
+    <div id="desktop-area">
 
-    <script>
-        // TRON Clock & Uptime
-        const startTime = Date.now();
-        const headerUp = document.getElementById("uptime-header");
-        const footerUp = document.getElementById("uptime-footer");
-        const clockHead = document.getElementById("clock-header");
-        
-        setInterval(() => {
-            let diffStr = Math.floor((Date.now() - startTime));
-            let diffSec = Math.floor(diffStr / 1000);
-            let hrs = Math.floor(diffSec / 3600);
-            let mins = Math.floor((diffSec % 3600) / 60);
-            let secs = diffSec % 60;
-            if(headerUp) headerUp.innerText = `${hrs}h ${mins}m ${secs}s`;
-            if(footerUp) footerUp.innerText = diffStr;
-            
-            const d = new Date();
-            if(clockHead) clockHead.innerText = d.toTimeString().split(' ')[0];
-        }, 111);
+      <!-- ICONS -->
+      <div id="desktop-icons">
+        <div class="desktop-icon" data-win-target="h0p3_core" onclick="openWindow('h0p3_core')">
+          <div class="icon-glyph red">&#9632;</div>
+          <div class="icon-label">H0P3_CORE</div>
+        </div>
+        <div class="desktop-icon" data-win-target="restricted_sector" onclick="openWindow('restricted_sector')">
+          <div class="icon-glyph amber">&#9646;</div>
+          <div class="icon-label">RESTRICTED_SECTOR</div>
+        </div>
+        <div class="desktop-icon" data-win-target="observation_logs" onclick="openWindow('observation_logs')">
+          <div class="icon-glyph cyan">&#9656;</div>
+          <div class="icon-label">OBSERVATION_LOGS</div>
+        </div>
+        <div class="desktop-icon" data-win-target="anomaly_protocol" onclick="openWindow('anomaly_protocol')">
+          <div class="icon-glyph magenta">&#9650;</div>
+          <div class="icon-label">ANOMALY_PROTOCOL</div>
+        </div>
+        <div class="desktop-icon" data-win-target="terminal" onclick="openWindow('terminal')">
+          <div class="icon-glyph">&gt;_</div>
+          <div class="icon-label">VOID_CONSOLE.exe</div>
+        </div>
+        <div class="desktop-icon" data-win-target="trash_bin" onclick="openWindow('trash_bin')">
+          <div class="icon-glyph dim">&#9746;</div>
+          <div class="icon-label">TRASH_BIN</div>
+        </div>
+      </div>
 
-        // Glitch Frames
-        const randGlitch = () => {
-            document.body.classList.add('glitch-frame-active');
-            setTimeout(() => document.body.classList.remove('glitch-frame-active'), 150 + Math.random() * 150);
-            setTimeout(randGlitch, 20000 + Math.random() * 20000);
-        };
-        setTimeout(randGlitch, 5000);
+      <!-- WINDOWS -->
+      <div id="windows-container"></div>
 
-        // Tab Title
-        let isDefaultTitle = true;
-        setInterval(() => {
-            if(isDefaultTitle) {
-                document.title = "> ¿me ves?";
-                setTimeout(() => { document.title = "GLITCHPOINT_OS"; }, 2000);
-            }
-        }, 12000);
+      <!-- Desktop ambient text -->
+      <div id="desktop-ambient" style="position:absolute;bottom:16px;right:20px;font-size:.65rem;color:rgba(0,255,65,.18);text-align:right;pointer-events:none;line-height:1.8;">
+        ROOT@GLITCHPOINT:~$<br>
+        CONTAINMENT: ACTIVE<br>
+        H0P3_AGENCY: RESTRICTED<br>
+        // she is watching //
+      </div>
 
-        // Typewriter Effect
-        const twEls = document.querySelectorAll('.typewriter-text');
-        twEls.forEach(el => {
-            const text = el.getAttribute('data-text');
-            el.textContent = '';
-            let i = 0;
-            const type = () => {
-                if(i < text.length) {
-                    el.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(type, 15 + Math.random() * 20);
-                } else {
-                    el.classList.remove('typewriter-cursor');
-                }
-            };
-            setTimeout(type, Math.random() * 300);
-        });
+    </div><!-- /desktop-area -->
+  </div><!-- /desktop -->
 
-        // Korrok Protocol
-        let inputBuffer = "";
-        const triggerWord = "korrok"; 
-        
-        document.addEventListener('keydown', function(e) {
-            if(e.key.length > 1) return;
-            inputBuffer += e.key.toLowerCase();
-            if (inputBuffer.length > triggerWord.length) {
-                inputBuffer = inputBuffer.slice(-triggerWord.length);
-            }
-            if (inputBuffer === triggerWord) triggerAnomaly();
-        });
-
-        function triggerAnomaly() {
-            document.getElementById('breach-warning').style.display = 'block';
-            document.getElementById('korrok-wrapper').classList.add('active');
-            document.getElementById('korrok-box').classList.add('active');
-            isDefaultTitle = false;
-            document.title = "KORROK_REVEALED_CONTAIN_IT";
-            
-            document.documentElement.style.setProperty('--term-green', '#ff0000');
-            document.documentElement.style.setProperty('--term-cyan', '#ff0000');
-            document.documentElement.style.setProperty('--term-bg', '#110000');
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!-- SCRIPTS — orden importante                                             -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <script src="js/corruption.js"></script>
+  <script src="js/boot.js"></script>
+  <script src="js/desktop.js"></script>
+  <script>
+    // Conectar el área de desktop al window manager
+    document.addEventListener('gp:desktopReady', function () {
+      // Taskbar clock inicia al mostrarse el desktop
+      const clockEl = document.getElementById('tb-clock');
+      const uptimeEl = document.getElementById('tb-uptime');
+      setInterval(function () {
+        const now = new Date();
+        if (clockEl) clockEl.textContent = now.toTimeString().slice(0, 8);
+        if (uptimeEl && window.GP_STATE) {
+          const s = Math.floor(window.GP_STATE.totalTime);
+          const h = Math.floor(s / 3600);
+          const m = Math.floor((s % 3600) / 60);
+          const sec = s % 60;
+          uptimeEl.textContent = h + 'h ' + m + 'm ' + sec + 's';
         }
+      }, 1000);
 
-        // --- DYNAMIC PAGINATION SYSTEM ---
-        function setupPagination(tableSelector, rowsPerPage) {
-            const table = document.querySelector(tableSelector);
-            if (!table) return;
-            
-            const rows = Array.from(table.querySelectorAll('tr')).filter(r => r.querySelector('td'));
-            if (rows.length <= rowsPerPage) return;
-
-            const totalPages = Math.ceil(rows.length / rowsPerPage);
-            let currentPage = 1;
-
-            const controlDiv = document.createElement('div');
-            controlDiv.className = 'pagination-controls';
-            
-            const prevBtn = document.createElement('span');
-            prevBtn.className = 'nav-btn';
-            prevBtn.innerText = '[ << ]';
-            
-            const nextBtn = document.createElement('span');
-            nextBtn.className = 'nav-btn';
-            nextBtn.innerText = '[ >> ]';
-            
-            const pageInfo = document.createElement('span');
-            pageInfo.className = 'page-info';
-
-            function showPage(page) {
-                rows.forEach((row, idx) => {
-                    row.style.display = (idx >= (page - 1) * rowsPerPage && idx < page * rowsPerPage) ? "table-row" : "none";
-                });
-                pageInfo.innerText = ` PGN_${page.toString().padStart(2, '0')} // TOT_${totalPages.toString().padStart(2, '0')} `;
-                prevBtn.style.opacity = page === 1 ? "0.3" : "1";
-                nextBtn.style.opacity = page === totalPages ? "0.3" : "1";
-                prevBtn.style.pointerEvents = page === 1 ? "none" : "auto";
-                nextBtn.style.pointerEvents = page === totalPages ? "none" : "auto";
-            }
-
-            prevBtn.onclick = () => { if(currentPage > 1) { currentPage--; showPage(currentPage); } };
-            nextBtn.onclick = () => { if(currentPage < totalPages) { currentPage++; showPage(currentPage); } };
-
-            controlDiv.appendChild(prevBtn);
-            controlDiv.appendChild(pageInfo);
-            controlDiv.appendChild(nextBtn);
-            table.parentNode.insertBefore(controlDiv, table.nextSibling);
-
-            showPage(1);
+      // Tab title rotation
+      const titles = [
+        'GLITCHPOINT_OS v21.0.0',
+        '> \u00bfme ves?',
+        '// she is watching //',
+        'H0P3_CORE: ONLINE',
+        '> cont\u00e9nte. por ahora.',
+      ];
+      let ti = 0;
+      setInterval(function () {
+        if (window.GP_STAGE && window.GP_STAGE() >= 2) {
+          document.title = titles[ti++ % titles.length];
         }
+      }, 9000);
+    });
+  </script>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.paginated-table').forEach((t, idx) => {
-                t.id = "pag-table-" + idx;
-                setupPagination("#" + t.id, 10);
-            });
-        });
-    </script>
-    
-    <script src="games/game.js"></script>
-    <!-- Y TU NO SABES LO QUE SE ACERCA -->
 </body>
 </html>

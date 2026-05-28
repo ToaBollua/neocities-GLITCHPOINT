@@ -1,0 +1,12 @@
+{
+  "last_session_id": "9c8513d4-f5ec-4b22-88d7-ab967b651c19",
+  "last_event_key": "9c8513d4-f5ec-4b22-88d7-ab967b651c19:transcript:e3d680783e340b3125bf172b50f3df58ee86d7c82ce48ec86c84b8aac8c87ca3",
+  "last_prompted_session_id": "",
+  "last_prompted_at": "",
+  "last_reason": "short-session",
+  "last_user_message_count": 1,
+  "last_actionable_message_count": 0,
+  "deep_interview_lock_active": false,
+  "deep_interview_lock_source": "/home/bollua/workspace/neocities_glitchpoint/.omg/state/deep-interview.json",
+  "updated_at": "2026-04-22T22:49:42.998Z"
+}

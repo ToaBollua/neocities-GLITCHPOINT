@@ -1,83 +1,91 @@
-// TRON Clock & Uptime
-const startTime = Date.now();
-const headerUp = document.getElementById("uptime-header");
-const footerUp = document.getElementById("uptime-footer");
-const clockHead = document.getElementById("clock-header");
+/**
+ * GLITCHPOINT_OS — core.js (v21.0.0 — Updated)
+ * Script base compartido por sub-páginas (logs/, gp001, etc.)
+ * NO se usa en index.html (éste tiene sus propios scripts modulares).
+ */
 
-setInterval(() => {
-    let diffStr = Math.floor((Date.now() - startTime));
-    let diffSec = Math.floor(diffStr / 1000);
-    let hrs = Math.floor(diffSec / 3600);
-    let mins = Math.floor((diffSec % 3600) / 60);
-    let secs = diffSec % 60;
-    if(headerUp) headerUp.innerText = `${hrs}h ${mins}m ${secs}s`;
-    if(footerUp) footerUp.innerText = diffStr;
-    
-    const d = new Date();
-    if(clockHead) clockHead.innerText = d.toTimeString().split(' ')[0];
-}, 111);
+// Uptime / Clock para sub-páginas que tienen esos IDs
+(function () {
+  const headerUp = document.getElementById('uptime-header');
+  const footerUp = document.getElementById('uptime-footer');
+  const clockHead = document.getElementById('clock-header');
+  const sessionStart = Date.now();
 
-// Glitch Frames
-const randGlitch = () => {
-    document.body.classList.add('glitch-frame-active');
-    setTimeout(() => document.body.classList.remove('glitch-frame-active'), 150 + Math.random() * 150);
-    setTimeout(randGlitch, 20000 + Math.random() * 20000);
-};
-setTimeout(randGlitch, 5000);
+  if (headerUp || footerUp || clockHead) {
+    setInterval(function () {
+      const elapsed = Date.now() - sessionStart;
+      const sec = Math.floor(elapsed / 1000);
+      const h = Math.floor(sec / 3600);
+      const m = Math.floor((sec % 3600) / 60);
+      const s = sec % 60;
+      if (headerUp) headerUp.textContent = h + 'h ' + m + 'm ' + s + 's';
+      if (footerUp) footerUp.textContent = elapsed;
+      const d = new Date();
+      if (clockHead) clockHead.textContent = d.toTimeString().slice(0, 8);
+    }, 1000);
+  }
+})();
 
-// Tab Title
-let isDefaultTitle = true;
-let originalTitle = document.title;
-setInterval(() => {
-    if(isDefaultTitle && originalTitle !== "404 // NOT_FOUND") {
-        document.title = "> ¿me ves?";
-        setTimeout(() => { document.title = originalTitle; }, 2000);
-    }
-}, 12000);
+// Glitch burst global (sub-páginas)
+(function () {
+  function burst() {
+    document.body.classList.add('glitch-burst');
+    setTimeout(function () { document.body.classList.remove('glitch-burst'); }, 180);
+    setTimeout(burst, 18000 + Math.random() * 18000);
+  }
+  setTimeout(burst, 7000);
+})();
 
-// Typewriter Effect
-const twEls = document.querySelectorAll('.typewriter-text');
-twEls.forEach(el => {
-    const text = el.getAttribute('data-text');
-    if(!text) return;
-    el.textContent = '';
-    let i = 0;
-    const type = () => {
-        if(i < text.length) {
-            el.textContent += text.charAt(i);
-            i++;
-            setTimeout(type, 15 + Math.random() * 20);
+// Tab title (sub-páginas)
+(function () {
+  const originalTitle = document.title;
+  if (originalTitle.includes('404')) return;
+  const alt = ['> \u00bfme ves?', '// she is watching //', originalTitle];
+  let i = 0;
+  setInterval(function () {
+    document.title = alt[i++ % alt.length];
+    setTimeout(function () { document.title = originalTitle; }, 2500);
+  }, 14000);
+})();
+
+// Typewriter para sub-páginas
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.typewriter-text').forEach(function (el) {
+      const text = el.getAttribute('data-text');
+      if (!text) return;
+      el.textContent = '';
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          el.textContent += text.charAt(i++);
+          setTimeout(type, 16 + Math.random() * 18);
         } else {
-            el.classList.remove('typewriter-cursor');
+          el.classList.remove('typewriter-cursor');
         }
-    };
-    setTimeout(type, Math.random() * 300);
-});
+      }
+      setTimeout(type, Math.random() * 400);
+    });
+  });
+})();
 
-// Korrok Protocol
-let inputBuffer = "";
-const triggerWord = "korrok"; 
+// Korrok Protocol (sub-páginas)
+(function () {
+  let buf = '';
+  document.addEventListener('keydown', function (e) {
+    if (e.key.length > 1) return;
+    buf = (buf + e.key.toLowerCase()).slice(-6);
+    if (buf === 'korrok') triggerKorrok();
+  });
 
-document.addEventListener('keydown', function(e) {
-    if(e.key.length > 1) return;
-    inputBuffer += e.key.toLowerCase();
-    if (inputBuffer.length > triggerWord.length) {
-        inputBuffer = inputBuffer.slice(-triggerWord.length);
-    }
-    if (inputBuffer === triggerWord) triggerAnomaly();
-});
-
-function triggerAnomaly() {
+  function triggerKorrok() {
     const warn = document.getElementById('breach-warning');
-    if(warn) warn.style.display = 'block';
-    
-    document.querySelectorAll('.korrok-wrapper').forEach(e => e.classList.add('active'));
-    document.querySelectorAll('.korrok-box').forEach(e => e.classList.add('active'));
-    
-    isDefaultTitle = false;
-    document.title = "KORROK_REVEALED_CONTAIN_IT";
-    
+    if (warn) warn.style.display = 'block';
+    document.querySelectorAll('.korrok-wrapper').forEach(function (el) { el.classList.add('active'); });
+    document.querySelectorAll('.korrok-box').forEach(function (el) { el.classList.add('active'); });
+    document.title = 'KORROK_REVEALED';
     document.documentElement.style.setProperty('--term-green', '#ff0000');
     document.documentElement.style.setProperty('--term-cyan', '#ff0000');
-    document.documentElement.style.setProperty('--term-bg', '#110000');
-}
+    document.documentElement.style.setProperty('--os-bg', '#110000');
+  }
+})();

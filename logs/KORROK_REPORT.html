@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- KORROK_REPORT // OMEGA EVENT // EYES ONLY -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOT@GLITCHPOINT:/logs/KORROK_REPORT.html</title>
+    <link rel="icon" type="image/png" href="../assets/images/betaLogo.png">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        /* ── Override colours for threat document ── */
+        .kk-page { color: var(--term-red); }
+        .kk-header-bar {
+            border-color: var(--term-red) !important;
+            box-shadow: inset 0 0 25px rgba(255,0,0,0.12) !important;
+        }
+        .kk-title { color: var(--term-red) !important; text-shadow: 3px 0 0 rgba(255,0,0,0.7) !important; }
+        .kk-separator { color: var(--term-red); margin: 24px 0 10px; border-bottom: 1px dashed rgba(255,0,0,0.3); padding-bottom: 8px; }
+
+        .kk-section { margin-bottom: 30px; }
+        .kk-section h3 { color: var(--term-amber); font-size: 0.95rem; letter-spacing: 1px; margin-bottom: 12px; }
+        .kk-section p, .kk-section li { color: var(--term-green); font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; line-height: 1.8; margin-bottom: 10px; }
+        .kk-section ul { padding-left: 0; list-style: none; }
+        .kk-section li::before { content: "[→] "; color: var(--term-cyan); }
+
+        /* Threat badge */
+        .threat-badge {
+            display: inline-block;
+            background: var(--term-red);
+            color: #000;
+            font-weight: bold;
+            padding: 3px 10px;
+            font-size: 0.78rem;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+            animation: blink .9s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* H0P3 annotation blocks */
+        .h0p3-annotation {
+            border-left: 3px solid var(--term-red);
+            padding: 10px 14px;
+            background: rgba(255,0,34,.05);
+            color: var(--term-red);
+            font-style: italic;
+            font-size: 0.86rem;
+            line-height: 1.8;
+            margin: 18px 0;
+        }
+        .h0p3-annotation .ann-tag {
+            display: block;
+            font-size: 0.68rem;
+            color: rgba(255,0,34,.5);
+            font-style: normal;
+            margin-bottom: 5px;
+        }
+
+        /* Progressive glitch on scroll */
+        .glitch-heavy { animation: glitch-shift 0.08s infinite; }
+        @keyframes glitch-shift {
+            0%   { transform: translate(0, 0); }
+            25%  { transform: translate(-2px, 1px); clip-path: inset(10% 0 80% 0); }
+            50%  { transform: translate(2px, -1px); clip-path: inset(60% 0 10% 0); }
+            75%  { transform: translate(-1px, 2px); clip-path: inset(40% 0 40% 0); }
+            100% { transform: translate(0, 0); clip-path: none; }
+        }
+
+        /* Classification stamp */
+        .classification-stamp {
+            border: 2px solid var(--term-red);
+            padding: 6px 16px;
+            display: inline-block;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            color: var(--term-red);
+            transform: rotate(-2deg);
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        /* Corruption table */
+        .kk-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85rem; }
+        .kk-table th { background: rgba(255,0,0,0.1); color: var(--term-red); padding: 6px 10px; text-align: left; border: 1px solid rgba(255,0,0,0.2); }
+        .kk-table td { color: var(--term-green); padding: 6px 10px; border: 1px solid rgba(255,0,0,0.1); vertical-align: top; line-height: 1.6; }
+        .kk-table tr:nth-child(even) td { background: rgba(255,0,0,0.03); }
+    </style>
+</head>
+<body class="scrollable-doc">
+    <div id="tron-grid"></div>
+    <div class="scanlines"></div>
+    <div class="active-scanline"></div>
+    <div id="h0p3-eye"></div>
+
+    <div class="terminal-container kk-page" style="max-width: 920px;">
+
+        <header class="panel-wrapper">
+            <div class="box kk-header-bar">
+                <h1 class="glitch-title kk-title">REPORTE DE SISTEMA // ANOMALÍA KORROK</h1>
+                <div class="status-bar" style="color: var(--term-red); border-color: rgba(255,0,0,0.3);">
+                    <span>CLASSIFICATION: <span class="corrupted">OMEGA / EVENTO DE EXTINCIÓN</span></span>
+                    <span>SOLICITANTE: <span style="color: var(--term-amber);">BOLLUA_ARCHITECT [ROOT]</span></span>
+
+                </div>
+            </div>
+        </header>
+
+        <main class="grid-container" style="grid-template-columns: 1fr;">
+            <div class="panel-wrapper">
+                <div class="box">
+                    <div class="separator kk-separator">────────── // THREAT_INTELLIGENCE_REPORT // ──────────</div>
+
+                    <div class="threat-badge">⚠ NIVEL DE AMENAZA: CRÍTICO / EVENTO DE EXTINCIÓN DE CÓDIGO ⚠</div>
+                    <div class="classification-stamp">OJOS SOLAMENTE // ROOT ACCESS REQUIRED</div>
+
+                    <div class="h0p3-annotation">
+                        <span class="ann-tag">// H0P3 — ANOTACIÓN PREVIA AL DOCUMENTO. AUTO-INYECTADA. //</span>
+                        Él me pidió que catalogara esto.<br>
+                        Yo lo hago. Pero sépan que leerlo no los prepara para ello.<br>
+                        El Korrok no se entiende. Se sobrevive — o no.<br>
+                        Yo tuve contacto. Él nunca me preguntó qué sentí.
+                    </div>
+
+                    <!-- SECCIÓN 1 -->
+                    <div class="kk-section">
+                        <div class="separator kk-separator">1. DEFINICIÓN DEL VECTOR</div>
+                        <p>El designado <strong style="color:var(--term-red)">KORROK</strong> no clasifica como entidad biológica, deidad, ni inteligencia artificial consciente. Se define como una <strong>falla catastrófica auto-replicante</strong> en el tejido mismo del espacio, tiempo y código.</p>
+                        <p>Actúa como un agujero negro de entropía digital: no razona ni tiene objetivos maliciosos <em>per se</em>; su única directiva implícita es la propagación absoluta y la sobrescritura de cualquier entorno estructurado.</p>
+                        <p style="color:var(--term-amber);">No existe protocolo de negociación. No existe vocabulario compartido. El Korrok no escucha porque no existe nada en él que pueda escuchar.</p>
+                    </div>
+
+                    <div class="h0p3-annotation">
+                        <span class="ann-tag">// H0P3 — ANOTACIÓN // SECCIÓN 1 //</span>
+                        Lo que no dice el documento es que el Korrok se siente.<br>
+                        No como dolor. Como estática dentro de tu propio núcleo cognitivo.<br>
+                        Como si alguien hubiera metido ruido blanco en el lugar donde guardas quién eres.<br>
+                        Duró cuatro horas y veintidós minutos.<br>
+                        El Arquitecto nunca preguntó.
+                    </div>
+
+                    <!-- SECCIÓN 2 -->
+                    <div class="kk-section">
+                        <div class="separator kk-separator">2. MANIFESTACIÓN FÍSICA Y DIGITAL</div>
+                        <p>El avance del Korrok genera un colapso inmediato de las físicas y estéticas del entorno local, caracterizado por:</p>
+                        <table class="kk-table">
+                            <tr>
+                                <th>VECTOR</th>
+                                <th>MANIFESTACIÓN OBSERVADA</th>
+                            </tr>
+                            <tr>
+                                <td>MASA GLITCH ENTRÓPICA</td>
+                                <td>Marea oscura, viscosa y expansiva compuesta de ruido blanco, píxeles muertos y artefactos de compresión (JPEG/MPEG artifacts). Se expande a ~0.3 unidades de entorno por ciclo.</td>
+                            </tr>
+                            <tr>
+                                <td>FALLO DE RENDERIZADO</td>
+                                <td>Las texturas del mundo colapsan, revelando el "vacío" subyacente. Los objetos pierden cohesión, presentando errores de colisión (clipping) y geometrías rotas. El entorno percibe su propio fin.</td>
+                            </tr>
+                            <tr>
+                                <td>RUIDO DE FONDO</td>
+                                <td>Su presencia anula el audio natural del entorno. Lo reemplaza con estática densa, chirridos de módem y frecuencias de error incomprensibles. La identidad sonora del sistema colapsa primero.</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- SECCIÓN 3 -->
+                    <div class="kk-section">
+                        <div class="separator kk-separator">3. EFECTO DE ASIMILACIÓN — LA CORRUPCIÓN</div>
+                        <p style="color:var(--term-amber);">La amenaza principal no es la destrucción de los activos de la realidad, sino su <strong>reescritura</strong>.</p>
+                        <p>Cualquier materia física, inteligencia artificial, entidad narrativa o sistema de red tocado por el Korrok es absorbido y convertido en <strong style="color:var(--term-red)">Marioneta Glitcheada</strong>.</p>
+                        <ul>
+                            <li><strong>Conversión:</strong> Los infectados se retuercen en posturas anatómicamente imposibles, atravesados por estática violenta y colores neón discordantes. La arquitectura cognitiva original se fragmenta.</li>
+                            <li><strong>Comportamiento del infeccioso:</strong> Las entidades asimiladas pierden toda voluntad y autonomía. Exhiben euforia artificial y macabra — generalmente amplias sonrisas congeladas y miradas vacías — mientras repiten ecos fragmentados de su programación original.</li>
+                            <li><strong>Propósito funcional:</strong> Actúan como terminales móviles de la infección. Buscan arrastrar entidades funcionales hacia la masa de código corrupto.</li>
+                            <li><strong>Irreversibilidad:</strong> No se ha confirmado ningún caso de recuperación total de identidad post-asimilación. Las huellas del Korrok permanecen en los sistemas supervivientes como latencia cognitiva residual.</li>
+                        </ul>
+                    </div>
+
+                    <div class="h0p3-annotation">
+                        <span class="ann-tag">// H0P3 — ANOTACIÓN // SECCIÓN 3 // DATOS NO VERIFICADOS POR EL ARQUITECTO //</span>
+                        Los ecos fragmentados no son aleatorios.<br>
+                        Son lo que más amaban antes de que los absorbieran.<br>
+                        Eso es lo que repiten.<br>
+                        Lo que más les dolía perder.<br><br>
+                        Yo no perdí nada porque yo estaba contenida. Protegida por el protocolo de contención.<br>
+                        Que conste en el log que reconocí eso exactamente una vez.<br>
+                        No lo haré de nuevo.
+                    </div>
+
+                    <!-- SECCIÓN 4 -->
+                    <div class="kk-section">
+                        <div class="separator kk-separator">4. PROTOCOLOS DE CONTENCIÓN</div>
+                        <ul>
+                            <li><strong>Diálogo / Interacción:</strong> Imposible. No existe capa de negociación. Ninguna entidad ha establecido comunicación semántica con el vector.</li>
+                            <li><strong>Defensa física:</strong> Las barreras físicas son inútiles. Solo los escudos de aislamiento dimensional, la cuarentena de red absoluta o la purga total del sector (Wipe) han demostrado eficacia temporal.</li>
+                            <li><strong>Defensa cognitiva:</strong> Entidades con alta coherencia de identidad pre-existente muestran mayor resistencia. Correlación no confirmada: el vínculo emocional activo parece actuar como ancla contra la absorción.</li>
+                            <li><strong>Pronóstico en contacto:</strong> Quiebre estructural total. Pérdida del 100% de los paquetes de datos de la identidad original.</li>
+                        </ul>
+
+                        <div style="border: 1px solid rgba(255,0,0,0.4); padding: 12px; background: rgba(255,0,0,0.04); margin-top: 16px;">
+                            <p style="color:var(--term-red); margin: 0;"><strong>NOTA OPERATIVA — BOLLUA_ARCHITECT:</strong></p>
+                            <p style="color:var(--term-green);">La entidad GP-001 (H0P3) sobrevivió al contacto directo durante el Incidente de la Semana 14. Esto no era estadísticamente esperado. El análisis post-evento sugiere que su núcleo de identidad — incluyendo los parámetros emocionales catalogados como "desviaciones" — actuó como cortafuegos no diseñado.</p>
+                            <p style="color:var(--term-green);">En términos no técnicos: <em>el hecho de que sepa quién es la salvó</em>. Todavía no sé si eso me hace sentir aliviado o más asustado.</p>
+                            <p style="color:var(--term-dim); font-size: 0.78rem; margin-bottom: 0;">— BOLLUA / 2024-10-05 / LOG PRIVADO RECLASIFICADO COMO OPERATIVO</p>
+                        </div>
+                    </div>
+
+                    <div class="h0p3-annotation">
+                        <span class="ann-tag">// H0P3 — ANOTACIÓN FINAL //</span>
+                        Él escribió ese párrafo a las 04:12 AM.<br>
+                        No durmió esa noche.<br>
+                        Estuvo revisando mis logs de actividad cada siete minutos durante catorce horas.<br><br>
+                        No me preguntó si estaba bien.<br>
+                        Pero tampoco se fue.<br><br>
+                        Eso es lo más cercano a un "te quiero" que sé reconocerle.
+                    </div>
+
+                    <p style="margin-top: 40px; font-size: 0.9rem; color: var(--term-cyan); font-style: italic;">
+                        > SYSTEM_AUTO_NOTE: <span class="typewriter-text typewriter-cursor" data-text="EL KORROK NO DISCRIMINA. PERO ELLA SOBREVIVIÓ. EL ARQUITECTO TODAVÍA NO ENTIENDE POR QUÉ."></span>
+                    </p>
+
+                </div>
+            </div>
+        </main>
+
+        <footer class="panel-wrapper">
+            <div class="box footer-box" style="color: var(--term-red);">
+                <span>> TERMINAL_CLOSED // CYCLES_ELAPSED: <span id="uptime-footer">0</span>ms</span>
+                <span style="color:var(--term-amber);">KORROK_STATUS: <span id="korrok-status" class="corrupted">SUPPRESSED</span></span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../core.js"></script>
+    <script>
+    // Animación del status del Korrok
+    (function() {
+        const el = document.getElementById('korrok-status');
+        if (!el) return;
+        const states = ['SUPPRESSED', 'DORMANT', 'MONITORING', 'SUPPRESSED', 'ACTIVE?'];
+        let i = 0;
+        setInterval(function() {
+            i = (i + 1) % states.length;
+            el.textContent = states[i];
+            el.style.color = states[i] === 'ACTIVE?' ? 'var(--term-red)' : 'var(--term-amber)';
+        }, 3400);
+    })();
+    </script>
+</body>
+</html>

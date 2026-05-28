@@ -16,7 +16,7 @@ window.addEventListener('resize', resizeCanvas);
 // Diccionario alineado con el Lore de H0P3
 const dictionary = {
     tier1: ['h0p3', 'core', 'node', 'grid', 'link', 'vrm', 'bash', 'root'],
-    tier2: ['bollua', 'glitch', 'kernel', 'kafka', 'docker', 'binary', 'proxy'],
+    tier2: ['bollua', 'glitch', 'kernel', 'signal_bus', 'container_cell', 'binary', 'proxy'],
     tier3: ['korrok', 'aethereon', 'panteon', 'tulandia', 'soberania', 'nexus', 'refugio'],
     tier4: ['protocolo genesis', 'soberania sensorial', 'auditandote', 'glitchpoint spa']
 };

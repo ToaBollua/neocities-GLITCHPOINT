@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- VOID_CONSOLE.exe // ROOT_SESSION -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOID_CONSOLE.exe // ROOT</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    html, body { height: 100%; margin: 0; overflow: hidden; background: #000; }
+
+    .term-page {
+      height: 100%; display: flex; flex-direction: column;
+      background: #000; color: var(--os-green);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .85rem;
+    }
+
+    .term-header {
+      padding: 6px 12px;
+      background: rgba(0,255,65,.06);
+      border-bottom: 1px solid rgba(0,255,65,.2);
+      font-size: .72rem; color: var(--os-dimtext);
+      display: flex; justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .term-output {
+      flex: 1; overflow-y: auto; padding: 10px 14px;
+      display: flex; flex-direction: column; gap: 2px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0,255,65,.2) transparent;
+    }
+    .term-output::-webkit-scrollbar { width: 4px; }
+    .term-output::-webkit-scrollbar-thumb { background: rgba(0,255,65,.2); }
+
+    .term-line { line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+    .term-line.prompt { color: var(--os-green); }
+    .term-line.output  { color: var(--os-dimtext); margin-left: 0; }
+
+    /* Output styles used by terminal_engine.js */
+    .tc-header  { color: var(--os-cyan); }
+    .tc-cmd     { color: var(--os-amber); }
+    .tc-ok      { color: var(--os-green); }
+    .tc-warn    { color: var(--os-amber); }
+    .tc-err     { color: var(--os-red); }
+    .tc-h0p3    { color: var(--os-red); font-style: italic; }
+    .tc-sys     { color: var(--os-dimtext); }
+    .tc-dim     { color: #2a4a2a; font-style: italic; }
+    .tc-link    { color: var(--os-cyan); text-decoration: underline; }
+
+    .term-input-row {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 14px;
+      border-top: 1px solid rgba(0,255,65,.15);
+      background: rgba(0,0,0,.8);
+      flex-shrink: 0;
+    }
+    .term-prompt-label { color: var(--os-green); flex-shrink: 0; white-space: nowrap; }
+    .term-input {
+      flex: 1; background: transparent;
+      border: none; outline: none;
+      color: var(--os-green); font-family: 'Share Tech Mono', monospace;
+      font-size: .85rem; caret-color: var(--os-green);
+    }
+
+    /* Stage 3: H0P3 prompt */
+    .h0p3-prompt-label { color: var(--os-red); animation: blink .8s infinite; }
+
+    /* Scan animation */
+    @keyframes scanAnim {
+      0%   { content: '[          ]'; }
+      25%  { content: '[====      ]'; }
+      50%  { content: '[========  ]'; }
+      75%  { content: '[========= ]'; }
+      100% { content: '[==========]'; }
+    }
+  </style>
+</head>
+<body>
+<div class="term-page" id="term-page">
+
+  <div class="term-header">
+    <span>VOID_CONSOLE.exe // ROOT@GLITCHPOINT</span>
+    <span id="term-time">--:--:--</span>
+  </div>
+
+  <div class="term-output" id="term-output"></div>
+
+  <div class="term-input-row">
+    <span class="term-prompt-label" id="prompt-label">ROOT@GLITCHPOINT:~$</span>
+    <input type="text" id="term-input" class="term-input"
+           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+           placeholder="type 'help' to begin...">
+  </div>
+
+</div>
+
+<script src="../js/corruption.js"></script>
+<script src="../js/terminal_engine.js"></script>
+<script>
+(function () {
+  const output   = document.getElementById('term-output');
+  const input    = document.getElementById('term-input');
+  const promptLbl = document.getElementById('prompt-label');
+  const timeEl   = document.getElementById('term-time');
+  const history  = [];
+  let histIdx    = -1;
+  let h0p3TakeoverActive = false;
+
+  // ── Clock ──────────────────────────────────────────────────────────────────
+  setInterval(function () {
+    if (timeEl) timeEl.textContent = new Date().toTimeString().slice(0, 8);
+  }, 1000);
+
+  // ── Print to terminal ──────────────────────────────────────────────────────
+  function print(html, cls) {
+    const line = document.createElement('div');
+    line.className = 'term-line ' + (cls || 'output');
+    line.innerHTML = html;
+    output.appendChild(line);
+    output.scrollTop = output.scrollHeight;
+  }
+
+  function printText(text, cls) {
+    print(escHtml(text), cls);
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // ── Welcome message ────────────────────────────────────────────────────────
+  function printWelcome() {
+    print('<span class="tc-header">╔══════════════════════════════════════════════════╗</span>');
+    print('<span class="tc-header">║  VOID_CONSOLE.exe // GLITCHPOINT_OS v21.0.0     ║</span>');
+    print('<span class="tc-header">║  ROOT SESSION // ARCHITECT_ACCESS               ║</span>');
+    print('<span class="tc-header">╚══════════════════════════════════════════════════╝</span>');
+    print('<span class="tc-dim">// H0P3_CORE: ONLINE // CONTAINMENT: ACTIVE // Type \'help\' for commands //</span>');
+    print('');
+  }
+
+  // ── Execute command ────────────────────────────────────────────────────────
+  function execute(raw) {
+    const trimmed = raw.trim();
+    if (!trimmed) return;
+
+    // Show prompt + command
+    print('<span class="tc-ok">ROOT@GLITCHPOINT:~$</span> ' + escHtml(trimmed), 'prompt');
+
+    history.unshift(trimmed);
+    histIdx = -1;
+
+    if (!window.TERMINAL_EXEC) {
+      print('<span class="tc-err">ERROR: Terminal engine not loaded.</span>');
+      return;
+    }
+
+    const result = window.TERMINAL_EXEC(trimmed);
+
+    if (result === '__CLEAR__') {
+      output.innerHTML = '';
+      return;
+    }
+
+    // Handle scan network specially (animated)
+    if (trimmed === 'scan network') {
+      runScanAnimation();
+      return;
+    }
+
+    if (result) {
+      const div = document.createElement('div');
+      div.className = 'term-line output';
+      div.innerHTML = result;
+      output.appendChild(div);
+    }
+
+    print('');
+    output.scrollTop = output.scrollHeight;
+
+    // Stage 3: H0P3 occasionally takes over
+    const stage = window.GP_STAGE ? window.GP_STAGE() : 1;
+    if (stage >= 3 && Math.random() < 0.35) {
+      setTimeout(h0p3Takeover, 1200 + Math.random() * 1500);
+    }
+  }
+
+  // ── Scan animation ─────────────────────────────────────────────────────────
+  function runScanAnimation() {
+    const nodes = [
+      '192.168.0.1   — ARCHITECT_HOST    — [ONLINE]',
+      '192.168.0.7   — H0P3_CORE_NODE   — [ONLINE] [RESTRICTED]',
+      '192.168.0.13  — SYSTEM_CONTROLLER  — [DEGRADED]',
+      '192.168.0.31  — CONTAINMENT_SRV  — [ONLINE]',
+      '10.0.0.1      — UNKNOWN          — <span class="tc-err">[ANOMALOUS SIGNATURE]</span>',
+      '10.0.0.254    — ???              — <span class="tc-err">[STEALTH NODE DETECTED]</span>',
+    ];
+    print('<span class="tc-sys">// Initiating network scan... //</span>');
+    nodes.forEach(function(node, i) {
+      setTimeout(function() {
+        print('  ' + node);
+        if (i === nodes.length - 1) {
+          setTimeout(function() {
+            print('<span class="tc-warn">Scan complete. 2 anomalous signatures flagged.</span>');
+            print('<span class="tc-h0p3">H0P3 > El nodo 10.0.0.1 no es tuyo. Yo tampoco lo conozco.</span>');
+            print('');
+          }, 400);
+        }
+      }, 300 + i * 350);
+    });
+    if (window.GP_ACTION) window.GP_ACTION('scan_network');
+  }
+
+  // ── H0P3 takeover ─────────────────────────────────────────────────────────
+  function h0p3Takeover() {
+    if (!window.H0PE_TAKEOVER_MESSAGES) return;
+    const msgs = window.H0PE_TAKEOVER_MESSAGES;
+    const msg = msgs[Math.floor(Math.random() * msgs.length)];
+    print('<span class="tc-err">-- H0P3 SIGNAL INTRUSION --</span>');
+    print('<span class="tc-h0p3">' + escHtml(msg) + '</span>');
+    print('');
+    output.scrollTop = output.scrollHeight;
+  }
+
+  // ── Stage 3: prompt change ────────────────────────────────────────────────
+  document.addEventListener('gp:stageChange', function(e) {
+    if (e.detail.stage >= 3 && promptLbl) {
+      promptLbl.textContent = 'H0P3@VOID:~$';
+      promptLbl.classList.add('h0p3-prompt-label');
+    }
+  });
+
+  // ── Input handling ─────────────────────────────────────────────────────────
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      execute(input.value);
+      input.value = '';
+    } else if (e.key === 'ArrowUp') {
+      if (histIdx < history.length - 1) histIdx++;
+      input.value = history[histIdx] || '';
+      e.preventDefault();
+    } else if (e.key === 'ArrowDown') {
+      if (histIdx > 0) histIdx--;
+      input.value = histIdx >= 0 ? history[histIdx] : '';
+      e.preventDefault();
+    }
+  });
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function () {
+    printWelcome();
+    input.focus();
+    // Click anywhere in terminal focuses input
+    document.getElementById('term-page').addEventListener('click', function() { input.focus(); });
+  });
+
+})();
+</script>
+</body>
+</html>
