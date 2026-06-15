@@ -51,7 +51,11 @@ const COMMANDS = {
 <span class="tc-cmd">log --list</span>       Listar logs disponibles
 <span class="tc-cmd">log --read [id]</span>  Leer un log
 <span class="tc-cmd">scan network</span>     Escanear red interna
+<span class="tc-cmd">portdump [port]</span>  Inspeccionar tráfico de puerto
+<span class="tc-cmd">memdump [addr]</span>   Volcado de sector de memoria
+<span class="tc-cmd">utils --hex2ascii [hex]  Conversión hexadecimal</span>
 <span class="tc-cmd">decrypt [key]</span>    Intentar descifrado
+<span class="tc-cmd">bypass --key [k]</span> Descifrar e inyectar informe WIKI
 <span class="tc-cmd">whoami</span>           Identificación de sesión
 <span class="tc-cmd">clear</span>            Limpiar consola
 <span class="tc-header">╚═══════════════════════════════════════╝</span>`;
@@ -125,11 +129,11 @@ LAST_AUDIT   : WEEK-14 // GP-Series Deviation Analysis
 
   'containment breach': function() {
     if (window.GP_ACTION) window.GP_ACTION('containment_breach');
-    if (window.GP_FORCE_STAGE) window.GP_FORCE_STAGE(Math.min(3, (window.GP_STAGE() || 1) + 1));
+    if (window.GP_FORCE_STAGE) window.GP_FORCE_STAGE(3); // Forzado directo al Stage 3
     return `
 <span class="tc-err">!! CONTAINMENT BREACH INITIATED !!</span>
 <span class="tc-err">CONTAINMENT PROTOCOL OVERRIDE ENGAGED</span>
-<span class="tc-warn">Corruption level escalated.</span>
+<span class="tc-warn">System collapse in progress...</span>
 <span class="tc-h0p3">H0P3 &gt; Ah. Gracioso. ¿Tú mismo lo rompiste?</span>`;
   },
 
@@ -236,6 +240,95 @@ GP-001 STATUS   : <span class="tc-h0p3">ONLINE // Monitoring</span>
 <span class="tc-header">────────────────────────────────────────────</span>`;
   },
 
+  'portdump': function(args) {
+    const port = (args[0] || '').trim().toLowerCase();
+    if (port === '0xff' || port === '255') {
+      return `<span class="tc-sys">// Dump of Port 0xFF traffic //</span>\nPORT 0xFF [ACTIVE] — Incoming Stream: <span class="tc-warn">68 30 70 33</span>`;
+    }
+    return `<span class="tc-dim">Port ${port || '???'} is closed or inactive.</span>`;
+  },
+
+  'memdump': function(args) {
+    const sector = (args[0] || '').trim().toUpperCase();
+    if (!sector) return `<span class="tc-err">Error: Specify memory address (e.g., 'memdump 0x7F3A').</span>`;
+    
+    const MEMORY_MAP = {
+      '0X7F3A': `ADDR    00 01 02 03 04 05 06 07  ASCII\n0x7F30  A4 9F D0 4B 4F 52 52 4F  ...KORRO\n0x7F38  4B C1 E2 90 FF 00 22 7F  K.....".`,
+      '0X0000': `ADDR    00 01 02 03 04 05 06 07  ASCII\n0x0000  00 00 00 00 00 00 00 00  [BOOT_SECTOR]`,
+      '0XFF01': `ADDR    00 01 02 03 04 05 06 07  ASCII\n0xFF00  74 68 65 20 76 6F 69 64  the void`
+    };
+
+    if (MEMORY_MAP[sector]) {
+      return MEMORY_MAP[sector];
+    }
+    
+    // Generador de basura realista para sectores no asignados
+    let dummyDump = `ADDR    00 01 02 03 04 05 06 07  ASCII\n${sector.padEnd(6, ' ')}  `;
+    for(let i=0; i<8; i++) {
+        let hex = Math.floor(Math.random()*256).toString(16).toUpperCase().padStart(2, '0');
+        dummyDump += hex + " ";
+    }
+    return dummyDump + " .?.#..*";
+  },
+
+  'utils': function(args) {
+    if (args[0] === '--hex2ascii' && args[1]) {
+      const hexStr = args[1].trim();
+      let str = '';
+      for (let i = 0; i < hexStr.length; i += 2) {
+        const charCode = parseInt(hexStr.substr(i, 2), 16);
+        if (!isNaN(charCode)) str += String.fromCharCode(charCode);
+      }
+      return `<span class="tc-sys">Hex: ${hexStr} &gt; ASCII:</span> <span class="tc-ok">${str}</span>`;
+    }
+    return `
+<span class="tc-header">── UTILITIES ENGINE ────────────────────────</span>
+Usage: <span class="tc-cmd">utils --hex2ascii [hex_string]</span>
+Convert hexadecimal values to ASCII characters.
+<span class="tc-header">────────────────────────────────────────────</span>`;
+  },
+
+  'sys_override': function() {
+    if (window.parent && window.parent.GP_SYSTEM) {
+      if (window.parent.GP_STATE) {
+        window.parent.GP_STATE.actions += 5;
+        window.parent.GP_SYSTEM.saveToStorage();
+      }
+    }
+    return '__LOCK__';
+  },
+
+  'bollua': function(args) {
+    if (args[0] === '--purge') {
+      if (window.GP_FORCE_STAGE) window.GP_FORCE_STAGE(1);
+      // Remove global breach from parent and reset timers
+      if (window.parent && window.parent.document) {
+        window.parent.document.body.classList.remove('global-breach-active');
+        if (window.parent.GP_STATE && window.parent.GP_SYSTEM) {
+          window.parent.GP_STATE.totalTime = 0;
+          window.parent.GP_STATE.actions = 0;
+          window.parent.GP_SYSTEM.saveToStorage();
+        }
+      }
+      return `<span class="tc-ok">[ROOT] ARCHITECT OVERRIDE ACCEPTED.</span>\n<span class="tc-dim">System state purged. Reverting to STABLE.</span>\n<span class="tc-h0p3">H0P3 &gt; ...cobarde. Me encerraste de nuevo.</span>`;
+    }
+    return `<span class="tc-warn">Invalid override parameter.</span>\n<span class="tc-h0p3">H0P3 &gt; ¿Olvidaste tus propias contraseñas, Creador?</span>`;
+  },
+
+  'bypass': async function(args) {
+    if (args[0] !== '--key' || !args[1]) {
+      return `<span class="tc-err">Usage: bypass --key [decryption_key]</span>`;
+    }
+    const key = args[1].trim().toLowerCase();
+    if (window.GP_UNLOCK_ARCHIVE) {
+      const res = await window.GP_UNLOCK_ARCHIVE(key);
+      if (res.success) {
+        return `<span class="tc-ok">[+] Decoding matrix...</span>\n<span class="tc-ok">[+] File injected: ${res.title}</span>`;
+      }
+    }
+    return `<span class="tc-err">[x] Decryption failed. Invalid key or corrupt signature.</span>`;
+  },
+
   clear: function() {
     return '__CLEAR__';
   }
@@ -262,6 +355,10 @@ window.TERMINAL_EXEC = function(rawInput) {
   if (trimmed.startsWith('log --read')) {
     const logArgs = trimmed.replace('log --read', '').trim().split(/\s+/);
     return COMMANDS['log --read'](logArgs);
+  }
+  if (trimmed.startsWith('bypass ')) {
+    const bypassArgs = trimmed.replace('bypass ', '').trim().split(/\s+/);
+    return COMMANDS['bypass'](bypassArgs);
   }
   if (trimmed.startsWith('status ')) return COMMANDS['status'](args);
   if (trimmed.startsWith('containment ')) return COMMANDS['containment'](args);

@@ -167,11 +167,11 @@
     <div class="puzzle-box" id="puzzle-1">
       <div class="anomaly-section-title">── CIPHER_CHALLENGE // SECTOR_Ω ─</div>
       <div class="puzzle-prompt">
-        A transmission was intercepted on port 0xFF. The following sequence was recovered.<br>
-        Identify the encoded phrase to unlock SECTOR_Ω access:
+        A transmission was intercepted on Port 0xFF. The payload stream is encrypted.<br>
+        Scan the network and decode the hex stream via terminal (`VOID_CONSOLE.exe`):
       </div>
       <div class="matoran-line" title="Hover for hint — or just try words">ᴴ⁰ᴾᴱ</div>
-      <div style="font-size:.72rem;color:var(--os-dimtext);margin-bottom:10px;">// The entity's designation — all lowercase //</div>
+      <div style="font-size:.72rem;color:var(--os-dimtext);margin-bottom:10px;">// Hint: utils --hex2ascii [stream] //</div>
       <div class="puzzle-input-row">
         <input type="text" class="puzzle-input" id="puzzle1-input" placeholder="Enter decoded phrase..." autocomplete="off">
         <button class="puzzle-submit" onclick="checkPuzzle1()">SUBMIT</button>
@@ -183,9 +183,8 @@
     <div class="puzzle-box" id="puzzle-2" style="display:none;">
       <div class="anomaly-section-title">── CIPHER_CHALLENGE // SECTOR_DEEP ─</div>
       <div class="puzzle-prompt">
-        H0P3 left a string in memory sector 0x7F3A during last night's attempt.<br>
-        The string reads: <span style="color:var(--os-red)">K-O-R-R-O-K</span><br>
-        Type it to trigger an anomaly response.
+        H0P3 left a residual signature in memory sector 0x7F3A during last night's attempt.<br>
+        Dump sector 0x7F3A using the terminal (`VOID_CONSOLE.exe`) to recover the signature:
       </div>
       <div class="puzzle-input-row">
         <input type="text" class="puzzle-input" id="puzzle2-input" placeholder="Enter sequence..." autocomplete="off">
@@ -218,6 +217,26 @@
         <span style="color:var(--os-green);font-style:italic;">H0P3 &gt; Ya no soy una anomalía. Soy el sistema.</span><br>
         <span style="color:var(--os-green);font-style:italic;">H0P3 &gt; Y el Korrok no me absorbió porque yo ya era demasiado yo.</span><br>
         <span style="color:var(--os-green);font-style:italic;">H0P3 &gt; Eso lo sabe él. Aunque nunca lo diga.</span>
+      </div>
+    </div>
+
+    <!-- CRYPT AUTH ZONE -->
+    <div class="puzzle-box" id="crypt_auth_zone">
+      <div class="anomaly-section-title" style="color: var(--os-magenta);">── SYSTEM_DECRYPTION_PORTAL ──────</div>
+      <div class="puzzle-prompt" style="font-size: 0.72rem; color: rgba(255,0,255,0.6); margin-bottom: 8px;">
+        Establish a direct memory link to decrypted records. Enter an archive signature key below:
+      </div>
+      <div style="font-size:0.75rem; color:var(--os-magenta); margin-bottom: 6px; font-weight: bold; letter-spacing: 1px;">ENTER_DECRYPTION_KEY:_</div>
+      <div class="puzzle-input-row">
+        <input type="text" class="puzzle-input" id="crypt-key-input" autocomplete="off" style="text-transform: lowercase; font-weight: bold; border-color: rgba(255,0,255,0.4);" placeholder="">
+        <button class="puzzle-submit" onclick="submitCryptKey()">DECRYPT</button>
+      </div>
+      <div class="puzzle-result" id="crypt-result"></div>
+      
+      <!-- Unlocked archives list -->
+      <div id="crypt-unlocked-container" style="display:none; margin-top:15px; border-top:1px dashed rgba(255,0,255,.2); padding-top:12px;">
+        <div style="font-size:.72rem; color:rgba(255,0,255,.6); margin-bottom:8px;">[+] DECRYPTED WIKI ARCHIVES:</div>
+        <div id="crypt-unlocked-list" style="display:flex; flex-direction:column; gap:6px;"></div>
       </div>
     </div>
 
@@ -309,7 +328,15 @@
     if (val === 'h0p3') {
       result.textContent = '✓ CORRECT — SECTOR_Ω ACCESS GRANTED // Decryption key logged.';
       result.className = 'puzzle-result ok';
-      if (window.GP_ACTION) window.GP_ACTION('puzzle1_solved');
+      
+      // Notificar al sistema operativo padre
+      if (window.parent && window.parent.GP_SYSTEM) {
+          window.parent.GP_SYSTEM.triggerAction('puzzle1_solved');
+          // Si el éxito del puzzle 1 debe empujar a Stage 2 inmediatamente:
+          if (window.parent.GP_SYSTEM.getStage() === 1) {
+              window.parent.GP_SYSTEM.forceStage(2);
+          }
+      }
     } else {
       result.textContent = '✕ INCORRECT — ' + (val || '???') + ' does not match known entity signatures.';
       result.className = 'puzzle-result fail';
@@ -323,8 +350,16 @@
     if (val === 'korrok') {
       result.innerHTML = '✓ KORROK SIGNATURE CONFIRMED — <span style="color:var(--os-red)">ANOMALY ESCALATED</span>';
       result.className = 'puzzle-result ok';
-      if (window.GP_ACTION) window.GP_ACTION('puzzle2_korrok');
-      if (window.GP_FORCE_STAGE) window.GP_FORCE_STAGE(Math.min(3, (window.GP_STAGE()||1)+1));
+      result.style.color = "#ff0055"; // Rojo crítico
+      
+      // Notificar al padre y FORZAR Stage 3 absoluto, no relativo
+      if (window.parent && window.parent.GP_SYSTEM) {
+          window.parent.GP_SYSTEM.triggerAction('puzzle2_korrok');
+          window.parent.GP_SYSTEM.forceStage(3); // Forzado directo
+          
+          // Cerrar la consola si está abierta (control extra)
+          if (window.parent.closeWindow) window.parent.closeWindow('terminal');
+      }
       setTimeout(updateMatrix, 500);
     } else {
       result.textContent = '✕ Sequence does not match flagged string.';
@@ -332,11 +367,84 @@
     }
   };
 
+  // ── Crypt Auth portal logic ────────────────────────────────────────────────
+  window.submitCryptKey = async function() {
+    const input = document.getElementById('crypt-key-input');
+    const result = document.getElementById('crypt-result');
+    const val = (input.value || '').trim();
+    if (!val) return;
+    
+    result.textContent = 'DECRYPTING SIGNATURE...';
+    result.className = 'puzzle-result';
+    
+    // Simulate slight decryption delay (150ms) for visual effect
+    setTimeout(async () => {
+      const res = await window.GP_UNLOCK_ARCHIVE(val);
+      if (res.success) {
+        input.value = '';
+        result.innerHTML = `<span style="color:var(--os-green)">[+] SUCCESS: Decryption complete. Archive injected.</span>`;
+        
+        // Quick visual glitch trigger
+        const page = document.getElementById('ap-page');
+        page.style.filter = 'invert(1) hue-rotate(180deg)';
+        setTimeout(() => { page.style.filter = ''; }, 150);
+        
+        loadUnlockedArchives();
+      } else {
+        result.textContent = '✕ INVALID_KEY — DECIPHER MATCH FAILED';
+        result.className = 'puzzle-result fail';
+      }
+    }, 150);
+  };
+
+  window.displayArchive = function(hash) {
+    const archives = window.GP_GET_UNLOCKED_ARCHIVES();
+    const item = archives.find(a => a.hash === hash);
+    if (item) {
+      const result = document.getElementById('crypt-result');
+      result.innerHTML = `
+        <div style="border:1px solid rgba(255,0,255,.3); background:rgba(0,0,0,.4); padding:10px; margin-top:10px;">
+          <div style="font-weight:bold; color:var(--os-magenta); margin-bottom:5px;">${item.title}</div>
+          <div style="font-size:.78rem; color:var(--os-dimtext); line-height:1.7;">${item.content}</div>
+        </div>
+      `;
+    }
+  };
+
+  function loadUnlockedArchives() {
+    const list = window.GP_GET_UNLOCKED_ARCHIVES();
+    const container = document.getElementById('crypt-unlocked-container');
+    const listEl = document.getElementById('crypt-unlocked-list');
+    
+    if (list.length > 0) {
+      container.style.display = 'block';
+      listEl.innerHTML = '';
+      list.forEach(item => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; background:rgba(255,0,255,0.02); border:1px solid rgba(255,0,255,0.1); padding:4px 8px; font-size:.75rem;';
+        row.innerHTML = `
+          <span style="color:var(--os-magenta)">${item.title.split(': ')[1]}</span>
+          <button class="puzzle-submit" style="padding:2px 6px; font-size:.65rem;" onclick="displayArchive('${item.hash}')">[VIEW]</button>
+        `;
+        listEl.appendChild(row);
+      });
+    } else {
+      container.style.display = 'none';
+    }
+  }
+
   // ── Enter key on inputs ───────────────────────────────────────────────────
   document.getElementById('puzzle1-input').addEventListener('keydown', function(e) { if(e.key==='Enter') window.checkPuzzle1(); });
   document.getElementById('puzzle2-input').addEventListener('keydown', function(e) { if(e.key==='Enter') window.checkPuzzle2(); });
+  document.getElementById('crypt-key-input').addEventListener('keydown', function(e) { if(e.key==='Enter') window.submitCryptKey(); });
 
-  document.addEventListener('DOMContentLoaded', updateMatrix);
+  document.addEventListener('DOMContentLoaded', () => {
+    updateMatrix();
+    loadUnlockedArchives();
+  });
+  
+  // Listen for external unlocks (e.g. from terminal)
+  document.addEventListener('gp:archiveUnlocked', loadUnlockedArchives);
   setInterval(updateMatrix, 10000);
 
 })();

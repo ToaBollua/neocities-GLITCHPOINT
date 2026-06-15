@@ -45,12 +45,12 @@ html, body {
 
 body.scrollable-doc {
   overflow: auto !important;
-  height: auto !important;
+  height: 100% !important;
   min-height: 100%;
   padding-bottom: 20px;
 }
 html:has(body.scrollable-doc) {
-  overflow: auto !important;
+  overflow: hidden !important;
   height: 100% !important;
 }
 
@@ -492,3 +492,39 @@ li { margin-bottom: 7px; border-left: 2px solid var(--os-cyan); padding-left: 10
 .profile-img { width: 100%; max-width: 260px; display: block; }
 .profile-img-h0p3 { filter: contrast(1.3) brightness(.9) sepia(1) hue-rotate(-50deg) saturate(2.5); }
 .profile-img-gray  { filter: contrast(1.1) brightness(.85) grayscale(1); }
+
+/* Efecto de Window Drift agresivo para Stage 3 (dura 3s para evitar fatiga visual/riesgo de epilepsia) */
+.global-breach-active .os-window {
+    animation: windowQuake 0.25s 12;
+}
+
+@keyframes windowQuake {
+    0% { 
+        transform: translate(2px, 3px) rotate(-1deg); 
+        box-shadow: 5px 0 0 rgba(255,0,34,0.8), -5px 0 0 rgba(0,207,255,0.8), 0 0 30px rgba(255,0,34,0.4);
+    }
+    20% { 
+        transform: translate(-4px, -2px) rotate(1.5deg) scale(1.02); 
+        box-shadow: -6px 3px 0 rgba(255,0,34,0.8), 6px -3px 0 rgba(0,207,255,0.8), 0 0 40px rgba(0,207,255,0.3);
+        filter: contrast(120%) hue-rotate(-10deg);
+    }
+    40% { 
+        transform: translate(4px, -4px) rotate(-0.5deg); 
+        box-shadow: 3px -5px 0 rgba(255,0,34,0.9), -3px 5px 0 rgba(0,207,255,0.9), 0 0 25px rgba(255,0,255,0.4);
+        filter: none;
+    }
+    60% { 
+        transform: translate(-5px, 5px) rotate(0.5deg) skewX(2deg); 
+        box-shadow: -5px 0 0 rgba(255,0,34,0.8), 5px 0 0 rgba(0,207,255,0.8), 0 0 50px rgba(255,0,34,0.5);
+        filter: invert(10%) contrast(150%);
+    }
+    80% { 
+        transform: translate(1px, -5px) rotate(-2deg) skewX(-2deg); 
+        box-shadow: 2px 6px 0 rgba(255,0,34,0.8), -2px -6px 0 rgba(0,207,255,0.8), 0 0 30px rgba(0,207,255,0.4);
+        filter: none;
+    }
+    100% { 
+        transform: translate(-2px, 3px) rotate(1deg); 
+        box-shadow: 5px 0 0 rgba(255,0,34,0.8), -5px 0 0 rgba(0,207,255,0.8), 0 0 35px rgba(255,0,34,0.3);
+    }
+}

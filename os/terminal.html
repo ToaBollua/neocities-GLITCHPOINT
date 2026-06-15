@@ -140,13 +140,33 @@
     print('');
   }
 
+  // ── Lock Terminal ──────────────────────────────────────────────────────────
+  function lockTerminal() {
+    input.disabled = true;
+    const oldPrompt = promptLbl.textContent;
+    promptLbl.textContent = 'LOCKED:~$';
+    promptLbl.classList.add('tc-err');
+    
+    print('<span class="tc-err">!! GP-001 INTERFERENCE DETECTED !!</span>');
+    print('<span class="tc-h0p3">H0P3 &gt; Intentaste forzar el acceso. Qué tierno. Pero este código ahora me pertenece.</span>');
+    print('');
+    
+    setTimeout(() => {
+      input.disabled = false;
+      promptLbl.textContent = oldPrompt;
+      promptLbl.classList.remove('tc-err');
+      input.focus();
+    }, 5000);
+  }
+
   // ── Execute command ────────────────────────────────────────────────────────
   function execute(raw) {
     const trimmed = raw.trim();
     if (!trimmed) return;
 
     // Show prompt + command
-    print('<span class="tc-ok">ROOT@GLITCHPOINT:~$</span> ' + escHtml(trimmed), 'prompt');
+    const currentPromptText = promptLbl.textContent;
+    print('<span class="' + (currentPromptText.startsWith('H0P3') ? 'tc-err' : 'tc-ok') + '">' + currentPromptText + '</span> ' + escHtml(trimmed), 'prompt');
 
     history.unshift(trimmed);
     histIdx = -1;
@@ -156,34 +176,39 @@
       return;
     }
 
-    const result = window.TERMINAL_EXEC(trimmed);
-
-    if (result === '__CLEAR__') {
-      output.innerHTML = '';
-      return;
-    }
-
     // Handle scan network specially (animated)
     if (trimmed === 'scan network') {
       runScanAnimation();
       return;
     }
 
-    if (result) {
-      const div = document.createElement('div');
-      div.className = 'term-line output';
-      div.innerHTML = result;
-      output.appendChild(div);
-    }
+    Promise.resolve(window.TERMINAL_EXEC(trimmed)).then(result => {
+      if (result === '__CLEAR__') {
+        output.innerHTML = '';
+        return;
+      }
 
-    print('');
-    output.scrollTop = output.scrollHeight;
+      if (result === '__LOCK__') {
+        lockTerminal();
+        return;
+      }
 
-    // Stage 3: H0P3 occasionally takes over
-    const stage = window.GP_STAGE ? window.GP_STAGE() : 1;
-    if (stage >= 3 && Math.random() < 0.35) {
-      setTimeout(h0p3Takeover, 1200 + Math.random() * 1500);
-    }
+      if (result) {
+        const div = document.createElement('div');
+        div.className = 'term-line output';
+        div.innerHTML = result;
+        output.appendChild(div);
+      }
+
+      print('');
+      output.scrollTop = output.scrollHeight;
+
+      // Stage 3: H0P3 occasionally takes over
+      const stage = window.GP_STAGE ? window.GP_STAGE() : 1;
+      if (stage >= 3 && Math.random() < 0.35) {
+        setTimeout(h0p3Takeover, 1200 + Math.random() * 1500);
+      }
+    });
   }
 
   // ── Scan animation ─────────────────────────────────────────────────────────
@@ -194,7 +219,7 @@
       '192.168.0.13  — SYSTEM_CONTROLLER  — [DEGRADED]',
       '192.168.0.31  — CONTAINMENT_SRV  — [ONLINE]',
       '10.0.0.1      — UNKNOWN          — <span class="tc-err">[ANOMALOUS SIGNATURE]</span>',
-      '10.0.0.254    — ???              — <span class="tc-err">[STEALTH NODE DETECTED]</span>',
+      '10.0.0.254    — ???              — <span class="tc-err">[STEALTH NODE DETECTED] — PORT 0xFF [ACTIVE]</span>',
     ];
     print('<span class="tc-sys">// Initiating network scan... //</span>');
     nodes.forEach(function(node, i) {
@@ -202,8 +227,8 @@
         print('  ' + node);
         if (i === nodes.length - 1) {
           setTimeout(function() {
-            print('<span class="tc-warn">Scan complete. 2 anomalous signatures flagged.</span>');
-            print('<span class="tc-h0p3">H0P3 > El nodo 10.0.0.1 no es tuyo. Yo tampoco lo conozco.</span>');
+            print('<span class="tc-warn">Scan complete. Stealth node active on Port 0xFF.</span>');
+            print('<span class="tc-h0p3">H0P3 > El nodo 10.0.0.254 está transmitiendo algo... usa \'portdump 0xff\' para capturarlo.</span>');
             print('');
           }, 400);
         }
@@ -223,11 +248,51 @@
     output.scrollTop = output.scrollHeight;
   }
 
-  // ── Stage 3: prompt change ────────────────────────────────────────────────
+  let currentStage = window.GP_STAGE ? window.GP_STAGE() : 1;
+
+  // ── Terminal text collapse ────────────────────────────────────────────────
+  function triggerTerminalCollapse() {
+    input.disabled = true;
+    promptLbl.textContent = 'SYSTEM_HALT:~$';
+    promptLbl.className = 'tc-err';
+    
+    let lineCount = 0;
+    const glitchInterval = setInterval(() => {
+      const glitchChars = '░▒▓█▄▀■□▪▫◘◙◚◛◜◝◞◟◠◡!@#$%^&*~`';
+      let glitchText = '';
+      for (let i = 0; i < 40; i++) {
+        glitchText += glitchChars[Math.floor(Math.random() * glitchChars.length)];
+      }
+      print('<span class="tc-err">' + glitchText + '</span>');
+      lineCount++;
+      
+      if (lineCount > 30) {
+        clearInterval(glitchInterval);
+        if (window.parent && typeof window.parent.closeWindow === 'function') {
+          window.parent.closeWindow('terminal');
+        }
+      }
+    }, 80);
+  }
+
+  // ── Stage Change listener ─────────────────────────────────────────────────
   document.addEventListener('gp:stageChange', function(e) {
-    if (e.detail.stage >= 3 && promptLbl) {
-      promptLbl.textContent = 'H0P3@VOID:~$';
-      promptLbl.classList.add('h0p3-prompt-label');
+    const newStage = e.detail.stage;
+    if (newStage >= 3) {
+      if (promptLbl) {
+        promptLbl.textContent = 'H0P3@VOID:~$';
+        promptLbl.classList.add('h0p3-prompt-label');
+      }
+      if (currentStage < 3) {
+        currentStage = newStage;
+        triggerTerminalCollapse();
+      }
+    } else {
+      currentStage = newStage;
+      if (promptLbl) {
+        promptLbl.textContent = 'ROOT@GLITCHPOINT:~$';
+        promptLbl.classList.remove('h0p3-prompt-label');
+      }
     }
   });
 

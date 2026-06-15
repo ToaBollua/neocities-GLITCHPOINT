@@ -147,10 +147,10 @@
       try {
         const doc = iframe.contentDocument || iframe.contentWindow.document;
         if (doc && doc.body && doc.body.classList.contains('scrollable-doc')) {
-          doc.documentElement.style.setProperty('overflow', 'auto', 'important');
+          doc.documentElement.style.setProperty('overflow', 'hidden', 'important');
           doc.documentElement.style.setProperty('height', '100%', 'important');
           doc.body.style.setProperty('overflow', 'auto', 'important');
-          doc.body.style.setProperty('height', 'auto', 'important');
+          doc.body.style.setProperty('height', '100%', 'important');
         }
       } catch (e) {
         // Ignorar errores cross-origin si el iframe carga páginas externas

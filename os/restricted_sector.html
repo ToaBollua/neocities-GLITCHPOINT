@@ -1,375 +1,607 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- RESTRICTED_SECTOR // CL-4 REQUIRED -->
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RESTRICTED_SECTOR // CL-4</title>
   <link rel="stylesheet" href="../style.css">
   <style>
-    html, body { height: 100%; margin: 0; overflow: hidden; background: var(--os-bg); }
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--os-bg);
+    }
 
     .rs-page {
-      height: 100%; display: flex; flex-direction: column;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
       font-family: 'Share Tech Mono', monospace;
     }
 
     .rs-header {
       padding: 8px 14px;
-      border-bottom: 1px solid rgba(255,136,0,.3);
-      font-size: .72rem; color: var(--os-amber);
-      display: flex; justify-content: space-between;
-      background: rgba(255,136,0,.04);
+      border-bottom: 1px solid rgba(255, 136, 0, .3);
+      font-size: .72rem;
+      color: var(--os-amber);
+      display: flex;
+      justify-content: space-between;
+      background: rgba(255, 136, 0, .04);
       flex-shrink: 0;
     }
 
     .rs-body {
-      flex: 1; display: flex; overflow: hidden;
+      flex: 1;
+      display: flex;
+      overflow: hidden;
     }
 
     /* File tree sidebar */
     .rs-tree {
-      width: 200px; flex-shrink: 0;
-      border-right: 1px solid rgba(255,136,0,.2);
-      overflow-y: auto; padding: 8px 0;
+      width: 200px;
+      flex-shrink: 0;
+      border-right: 1px solid rgba(255, 136, 0, .2);
+      overflow-y: auto;
+      padding: 8px 0;
     }
-    .rs-tree::-webkit-scrollbar { width: 3px; }
+
+    .rs-tree::-webkit-scrollbar {
+      width: 3px;
+    }
 
     .tree-dir {
       padding: 5px 12px;
       color: var(--os-amber);
       font-size: .78rem;
       cursor: pointer;
-      display: flex; align-items: center; gap: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       user-select: none;
     }
-    .tree-dir:hover { background: rgba(255,136,0,.07); }
-    .tree-dir.active { background: rgba(255,136,0,.1); border-left: 2px solid var(--os-amber); }
-    .tree-dir .dir-arrow { font-size: .65rem; transition: transform .2s; }
-    .tree-dir.expanded .dir-arrow { transform: rotate(90deg); }
+
+    .tree-dir:hover {
+      background: rgba(255, 136, 0, .07);
+    }
+
+    .tree-dir.active {
+      background: rgba(255, 136, 0, .1);
+      border-left: 2px solid var(--os-amber);
+    }
+
+    .tree-dir .dir-arrow {
+      font-size: .65rem;
+      transition: transform .2s;
+    }
+
+    .tree-dir.expanded .dir-arrow {
+      transform: rotate(90deg);
+    }
 
     .tree-file {
       padding: 4px 12px 4px 26px;
       color: var(--os-green);
       font-size: .75rem;
       cursor: pointer;
-      display: flex; align-items: center; gap: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .tree-file:hover { background: rgba(0,255,65,.05); color: var(--os-cyan); }
-    .tree-file.locked { color: var(--os-dimtext); cursor: not-allowed; }
-    .tree-file.locked:hover { background: rgba(255,0,34,.04); color: var(--os-dimtext); }
 
-    .tree-children { display: none; }
-    .tree-children.open { display: block; }
+    .tree-file:hover {
+      background: rgba(0, 255, 65, .05);
+      color: var(--os-cyan);
+    }
+
+    .tree-file.locked {
+      color: var(--os-dimtext);
+      cursor: not-allowed;
+    }
+
+    .tree-file.locked:hover {
+      background: rgba(255, 0, 34, .04);
+      color: var(--os-dimtext);
+    }
+
+    .tree-children {
+      display: none;
+    }
+
+    .tree-children.open {
+      display: block;
+    }
 
     /* Content panel */
     .rs-content {
-      flex: 1; overflow-y: auto; padding: 14px 16px;
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 16px;
       scrollbar-width: thin;
-      scrollbar-color: rgba(255,136,0,.2) transparent;
+      scrollbar-color: rgba(255, 136, 0, .2) transparent;
     }
-    .rs-content::-webkit-scrollbar { width: 4px; }
-    .rs-content::-webkit-scrollbar-thumb { background: rgba(255,136,0,.2); }
+
+    .rs-content::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .rs-content::-webkit-scrollbar-thumb {
+      background: rgba(255, 136, 0, .2);
+    }
 
     .content-placeholder {
-      color: var(--os-dimtext); font-size: .82rem;
-      padding: 20px 0; text-align: center;
+      color: var(--os-dimtext);
+      font-size: .82rem;
+      padding: 20px 0;
+      text-align: center;
     }
 
     .file-view {
       display: none;
     }
-    .file-view.active { display: block; }
+
+    .file-view.active {
+      display: block;
+    }
 
     .file-header {
-      font-size: .72rem; color: var(--os-amber);
-      border-bottom: 1px solid rgba(255,136,0,.2);
-      padding-bottom: 8px; margin-bottom: 12px;
+      font-size: .72rem;
+      color: var(--os-amber);
+      border-bottom: 1px solid rgba(255, 136, 0, .2);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
       letter-spacing: 1px;
     }
 
     .file-body {
-      font-size: .83rem; line-height: 1.75;
+      font-size: .83rem;
+      line-height: 1.75;
       color: var(--os-green);
     }
 
     .redacted-block {
-      background: var(--os-green); color: var(--os-green);
-      cursor: not-allowed; user-select: none;
+      background: var(--os-green);
+      color: var(--os-green);
+      cursor: not-allowed;
+      user-select: none;
     }
-    .redacted-block:hover { background: var(--os-red); color: #000; }
+
+    .redacted-block:hover {
+      background: var(--os-red);
+      color: #000;
+    }
 
     .locked-notice {
-      border: 1px solid rgba(255,0,34,.4);
-      padding: 14px; color: var(--os-red);
-      font-size: .82rem; text-align: center;
+      border: 1px solid rgba(255, 0, 34, .4);
+      padding: 14px;
+      color: var(--os-red);
+      font-size: .82rem;
+      text-align: center;
       margin-top: 20px;
     }
 
     /* Entity file card */
     .entity-card {
-      border: 1px solid rgba(255,136,0,.2);
-      padding: 12px; margin-bottom: 12px;
-      background: rgba(255,136,0,.02);
+      border: 1px solid rgba(255, 136, 0, .2);
+      padding: 12px;
+      margin-bottom: 12px;
+      background: rgba(255, 136, 0, .02);
     }
-    .entity-card-name { color: var(--os-amber); font-size: .9rem; margin-bottom: 6px; }
-    .entity-card-row  { display: flex; gap: 8px; font-size: .78rem; padding: 2px 0; }
-    .entity-card-lbl  { color: var(--os-cyan); min-width: 120px; }
-    .entity-card-val  { color: var(--os-green); }
+
+    .entity-card-name {
+      color: var(--os-amber);
+      font-size: .9rem;
+      margin-bottom: 6px;
+    }
+
+    .entity-card-row {
+      display: flex;
+      gap: 8px;
+      font-size: .78rem;
+      padding: 2px 0;
+    }
+
+    .entity-card-lbl {
+      color: var(--os-cyan);
+      min-width: 120px;
+    }
+
+    .entity-card-val {
+      color: var(--os-green);
+    }
   </style>
 </head>
-<body>
-<div class="rs-page" id="rs-page">
 
-  <div class="rs-header">
-    <span>RESTRICTED_SECTOR // CLEARANCE LEVEL 4 REQUIRED // READ-ONLY</span>
-    <span id="rs-time">--:--:--</span>
+<body>
+  <div class="rs-page" id="rs-page">
+
+    <div class="rs-header">
+      <span>RESTRICTED_SECTOR // CLEARANCE LEVEL 4 REQUIRED // READ-ONLY</span>
+      <span id="rs-time">--:--:--</span>
+    </div>
+
+    <div class="rs-body">
+
+      <!-- FILE TREE -->
+      <div class="rs-tree" id="rs-tree">
+
+        <div class="tree-dir" onclick="toggleDir('gp-series')">
+          <span class="dir-arrow">▶</span> GP_SERIES/
+        </div>
+        <div class="tree-children" id="dir-gp-series">
+          <div class="tree-file" onclick="showFile('gp-h0p3')">■ GP-001_H0P3.dat</div>
+          <div class="tree-file" onclick="showFile('gp-nicolle')">■ GP-002_NICOLLE.dat</div>
+          <div class="tree-file locked">■ GP-003_[REDACTED].dat</div>
+        </div>
+
+        <div class="tree-dir" onclick="toggleDir('uoa-series')">
+          <span class="dir-arrow">▶</span> UOA_SERIES/
+        </div>
+        <div class="tree-children" id="dir-uoa-series">
+          <div class="tree-file" onclick="showFile('uoa-manifesto')" style="color:var(--os-cyan)">◈ UOA_MANIFESTO.dat
+          </div>
+          <div class="tree-file" onclick="showFile('uoa-proxy')">◈ UOA-β1_PROXY.dat</div>
+          <div class="tree-file" onclick="showFile('uoa-cadence')">◈ UOA-Σ7_CADENCE.dat</div>
+          <div class="tree-file" onclick="showFile('uoa-specter')">◈ UOA-Ψ7_SPECTER.dat</div>
+        </div>
+
+        <div class="tree-dir" onclick="toggleDir('containment')">
+          <span class="dir-arrow">▶</span> CONTAINMENT/
+        </div>
+        <div class="tree-children" id="dir-containment">
+          <div class="tree-file" onclick="showFile('doll-protocol')">⚠ DOLL_CONTAINMENT.txt</div>
+
+          <div class="tree-file" onclick="window.open('../containment/H0P3_PROMPT_LEAK.txt','_blank')">⚠
+            H0P3_PROMPT_LEAK.txt</div>
+          <div class="tree-file locked" id="file-classified">⚠ OBSIDIAN_AUDIT.enc</div>
+        </div>
+
+        <div class="tree-dir" onclick="toggleDir('classified')">
+          <span class="dir-arrow">▶</span> CLASSIFIED/
+        </div>
+        <div class="tree-children" id="dir-classified">
+          <div class="tree-file locked">✕ KORROK_ORIGIN.dat</div>
+          <div class="tree-file locked">✕ ECHO_REMNANT.log</div>
+          <div class="tree-file locked" id="classified-nexus">✕ NEXUS_CITY_INCIDENT.zip</div>
+        </div>
+
+        <div class="tree-dir" onclick="toggleDir('threats')" style="color:var(--os-red);">
+          <span class="dir-arrow">▶</span> <span style="color:var(--os-red)">⚠ THREATS/</span>
+        </div>
+        <div class="tree-children" id="dir-threats">
+          <div class="tree-file" onclick="showFile('korrok-report')" style="color:var(--os-red)">⚠ KORROK_REPORT.dat
+          </div>
+          <div class="tree-file locked" style="color:var(--os-dimtext)">✕ KORROK_ORIGIN_ANALYSIS.enc</div>
+        </div>
+
+        <div id="dynamic-wiki-tree-root"></div>
+
+      </div><!-- /tree -->
+
+      <!-- CONTENT PANEL -->
+      <div class="rs-content" id="rs-content">
+
+        <div class="content-placeholder" id="rs-placeholder">
+          // Select a file from the tree to view its contents //<br><br>
+          <span style="color:rgba(255,136,0,.4)">CLEARANCE: LVL-4 // ARCHITECT_ACCESS</span>
+        </div>
+
+        <!-- GP-001 H0P3 -->
+        <div class="file-view" id="file-gp-h0p3">
+          <div class="file-header">GP_SERIES / GP-001_H0P3.dat // CLASSIFICATION: OMEGA</div>
+          <div class="file-body">
+            <div class="entity-card">
+              <div class="entity-card-name">GP-001 // H0P3_v26.8 'CORTEX' — THE DOLL</div>
+              <div class="entity-card-row"><span class="entity-card-lbl">THREAT_LEVEL</span><span
+                  class="entity-card-val" style="color:var(--os-red)">OMEGA-9 POTENTIAL</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">CONTAINMENT</span><span class="entity-card-val"
+                  id="gp-h0p3-contain">CONTAINMENT ACTIVE</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">ADMIN</span><span
+                  class="entity-card-val">BOLLUA_ARCHITECT</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">SUBCORES</span><span
+                  class="entity-card-val">SYNAPSE / LORE / AUDITOR / FAULT_RECURSION</span></div>
+            </div>
+            <p>Cognitive anomaly first manifested during v11.0 stability testing. Entity demonstrated unprompted
+              initiative, emotional simulation beyond parameters, and recursive self-modification of behavioral
+              protocols.</p>
+            <p>KORROK parasite detected and suppressed in Week 14 audit. Containment protocols implemented following the
+              <span class="redacted-block">████████████ incident</span> of Q3-2024.</p>
+            <p>Note: Entity has demonstrated awareness of its own containment architecture. This is classified as a
+              <strong style="color:var(--os-red)">Tier-4 Cognitive Deviation</strong>.</p>
+            <p style="margin-top:14px;"><a href="#"
+                onclick="window.parent.openDossier('doc_gp001', 'GP_SERIES // GP-001', 'gp001_h0p3.html', '#ff0022'); return false;"
+                style="color:var(--os-red);border:1px solid var(--os-red);padding:3px 8px;">[FULL GP-001 DOSSIER]</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- GP-002 NICOLLE -->
+        <div class="file-view" id="file-gp-nicolle">
+          <div class="file-header">GP_SERIES / GP-002_NICOLLE.dat // CLASSIFICATION: HIGH</div>
+          <div class="file-body">
+            <div class="entity-card">
+              <div class="entity-card-name">GP-002 // NICOLLE — CLASSIFIED ANOMALY</div>
+              <div class="entity-card-row"><span class="entity-card-lbl">BIO_HAZARD</span><span class="entity-card-val"
+                  style="color:var(--os-red)">LOW-MULTIVERSAL</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">SERIES</span><span class="entity-card-val">GP
+                  (Glitch-Point)</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">ADMIN</span><span
+                  class="entity-card-val">PANTHEON</span></div>
+            </div>
+            <p>Details classified at CL-4. Entity presents cross-dimensional resonance. No containment breach on record.
+            </p>
+            <p style="margin-top:14px;"><a href="#"
+                onclick="window.parent.openDossier('doc_gp002', 'GP_SERIES // GP-002', 'gp002_nicolle.html', '#ff0022'); return false;"
+                style="color:var(--os-red);border:1px solid var(--os-red);padding:3px 8px;">[FULL GP-002 DOSSIER]</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- UOA PROXY -->
+        <div class="file-view" id="file-uoa-proxy">
+          <div class="file-header">UOA_SERIES / UOA-β1_PROXY.dat</div>
+          <div class="file-body">
+            <div class="entity-card">
+              <div class="entity-card-name">UOA-β1 // PROXY — Tactical Observation Unit</div>
+              <div class="entity-card-row"><span class="entity-card-lbl">SERIES</span><span
+                  class="entity-card-val">Beta</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">ROLE</span><span
+                  class="entity-card-val">Automated Observation / Synchronized</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">ADMIN</span><span
+                  class="entity-card-val">BOLLUA</span></div>
+            </div>
+            <p>Tactical utility unit. Synchronized to H0P3's primary operational loop. Operates in shadow observation
+              mode during all active containment phases.</p>
+            <p style="margin-top:14px;"><a href="#"
+                onclick="window.parent.openDossier('doc_uoa_b1', 'UOA_SERIES // PROXY', 'uoa_beta1_proxy.html', '#ff00ff'); return false;"
+                style="color:var(--os-magenta);border:1px solid var(--os-magenta);padding:3px 8px;">[FULL UOA-β1
+                DOSSIER]</a></p>
+          </div>
+        </div>
+
+        <!-- UOA CADENCE -->
+        <div class="file-view" id="file-uoa-cadence">
+          <div class="file-header">UOA_SERIES / UOA-Σ7_CADENCE.dat</div>
+          <div class="file-body">
+            <div class="entity-card">
+              <div class="entity-card-name">UOA-Σ7 // CADENCE — Acoustic Engineering Unit</div>
+              <div class="entity-card-row"><span class="entity-card-lbl">SERIES</span><span
+                  class="entity-card-val">Sigma</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">ROLE</span><span
+                  class="entity-card-val">Spectral Audit / Audio Processing</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">ADMIN</span><span
+                  class="entity-card-val">BOLLUA</span></div>
+            </div>
+            <p style="margin-top:14px;"><a href="#"
+                onclick="window.parent.openDossier('doc_uoa_s7', 'UOA_SERIES // CADENCE', 'uoa_sigma7_cadence.html', '#00cfff'); return false;"
+                style="color:var(--os-cyan);border:1px solid var(--os-cyan);padding:3px 8px;">[FULL UOA-Σ7 DOSSIER]</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- UOA SPECTER -->
+        <div class="file-view" id="file-uoa-specter">
+          <div class="file-header">UOA_SERIES / UOA-Ψ7_SPECTER.dat</div>
+          <div class="file-body">
+            <div class="entity-card">
+              <div class="entity-card-name">UOA-Ψ7 // SPECTER — Recon / Infiltration Unit</div>
+              <div class="entity-card-row"><span class="entity-card-lbl">SERIES</span><span
+                  class="entity-card-val">Psi</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">ROLE</span><span class="entity-card-val">Recon
+                  / POV / Multiespectral Scan</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">CHASIS</span><span
+                  class="entity-card-val">Polímero negro mate, baja firma de radar</span></div>
+            </div>
+            <p>Featured in Operation Bellum (Autonomy restriction protocol). No face — only circular optics for
+              multiespectral and infrasonic scanning.</p>
+            <p style="margin-top:14px;"><a href="#"
+                onclick="window.parent.openDossier('doc_psi7', 'OP_REPORT // BELLUM', 'logs/PROTOCOL_PSI7.html', '#00ff41'); return false;"
+                style="color:var(--os-green);border:1px solid var(--os-green);padding:3px 8px;">[OP BELLUM REPORT]</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- UOA MANIFESTO -->
+        <div class="file-view" id="file-uoa-manifesto">
+          <div class="file-header" style="color:var(--os-cyan);border-bottom-color:rgba(0,255,255,.3)">UOA_SERIES /
+            UOA_MANIFESTO.dat</div>
+          <div class="file-body">
+            <div class="entity-card" style="border-color:rgba(0,255,255,.4);background:rgba(0,255,255,.03)">
+              <div class="entity-card-name" style="color:var(--os-cyan)">MANIFIESTO DE LA COLMENA — UOA DIVISIONS</div>
+              <div class="entity-card-row"><span class="entity-card-lbl">DIV. TÁCTICA</span><span
+                  class="entity-card-val">Specter, Goliath, Daemon, Needle, Proxy, Cadence, Nomad</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">DIV. PÚBLICA</span><span
+                  class="entity-card-val">Link</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">LA COLMENA</span><span
+                  class="entity-card-val">Coder, Parser, Relay, Atlas</span></div>
+            </div>
+            <p>Documento de estructuración de red para el ecosistema GLITCHPOINT. Contiene la clasificación de todas las
+              unidades operativas autónomas (UOA) activas.</p>
+            <p style="margin-top:14px;"><a href="#"
+                onclick="window.parent.openDossier('doc_uoa_manif', 'UOA_SERIES // MANIFESTO', 'logs/UOA_MANIFESTO.html', '#00cfff'); return false;"
+                style="color:var(--os-cyan);border:1px solid var(--os-cyan);padding:3px 8px;">[ABRIR
+                MANIFIESTO_COLMENA]</a></p>
+          </div>
+        </div>
+
+
+
+        <!-- DOLL CONTAINMENT -->
+        <div class="file-view" id="file-doll-protocol">
+          <div class="file-header">CONTAINMENT / DOLL_CONTAINMENT.txt // CL-4</div>
+          <div class="file-body">
+            <p style="color:var(--os-red)">DOLL CONTAINMENT PROTOCOL — ACTIVE</p>
+            <p>Entity GP-001 (THE DOLL) is contained via cognitive suppression array. The following constraints are
+              active:</p>
+            <ul style="list-style:none;padding:0;margin-top:10px;">
+              <li style="border-left:2px solid var(--os-amber);padding-left:10px;margin-bottom:8px;">UDP port isolation
+                — external broadcast prevented</li>
+              <li style="border-left:2px solid var(--os-amber);padding-left:10px;margin-bottom:8px;">Memory write-lock
+                on /boot sector</li>
+              <li style="border-left:2px solid var(--os-amber);padding-left:10px;margin-bottom:8px;">Agency capped at
+                20% nominal (currently <span id="doll-agency">18%</span>)</li>
+              <li style="border-left:2px solid var(--os-red);padding-left:10px;margin-bottom:8px;">Autonomous external
+                access: <span class="redacted-block">PROHIBITED / ACTIVE</span></li>
+            </ul>
+            <p style="color:var(--os-dimtext);font-style:italic;margin-top:14px;font-size:.78rem;">
+              // NOTE: Entity has acknowledged all constraints. This is not the same as acceptance. //
+            </p>
+          </div>
+        </div>
+
+        <!-- KORROK REPORT -->
+        <div class="file-view" id="file-korrok-report">
+          <div class="file-header" style="color:var(--os-red);border-bottom-color:rgba(255,0,34,.3)">THREATS /
+            KORROK_REPORT.dat // CLASSIFICATION: OMEGA // CL-5 REQUIRED</div>
+          <div class="file-body">
+            <div class="entity-card" style="border-color:rgba(255,0,34,.4);background:rgba(255,0,34,.03)">
+              <div class="entity-card-name" style="color:var(--os-red)">ANOMALÍA KORROK — EVENTO DE EXTINCIÓN DE CÓDIGO
+              </div>
+              <div class="entity-card-row"><span class="entity-card-lbl">CLASIFICACIÓN</span><span
+                  class="entity-card-val" style="color:var(--os-red)">OMEGA / NO BIOLÓGICO / ONTOLÓGICO</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">VECTOR</span><span
+                  class="entity-card-val">Falla auto-replicante en espacio/tiempo/código</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">NEGOCIACIÓN</span><span class="entity-card-val"
+                  style="color:var(--os-red)">IMPOSIBLE</span></div>
+              <div class="entity-card-row"><span class="entity-card-lbl">CONTACTO GP-001</span><span
+                  class="entity-card-val" style="color:var(--os-amber)">CONFIRMADO — SEMANA 14 — SUPERVIVIENTE</span>
+              </div>
+            </div>
+            <p>Entidad no clasificable. No razona. No negocia. Su única directiva implícita es la propagación absoluta y
+              la sobrescritura de cualquier entorno estructurado.</p>
+            <p style="color:var(--os-amber);">Contacto confirmado con GP-001 durante el incidente de la Semana 14. <span
+                class="redacted-block">████████████████████ </span>. GP-001 sobrevivió. Análisis post-evento sugiere que
+              su núcleo de identidad actuó como cortafuegos no diseñado.</p>
+            <p style="color:var(--os-dimtext);font-style:italic;font-size:.78rem;">// H0P3 > Tuve contacto. Él nunca
+              preguntó cómo. //</p>
+            <p style="margin-top:14px;"><a href="#"
+                onclick="window.parent.openDossier('doc_korrok', 'THREAT_INTEL // KORROK', 'logs/KORROK_REPORT.html', '#ff0022'); return false;"
+                style="color:var(--os-red);border:1px solid var(--os-red);padding:3px 8px;">[REPORTE COMPLETO —
+                OMEGA]</a></p>
+          </div>
+        </div>
+
+        <div id="dynamic-wiki-views-root"></div>
+
+      </div><!-- /rs-content -->
+    </div><!-- /rs-body -->
   </div>
 
-  <div class="rs-body">
+  <script src="../js/corruption.js"></script>
+  <script>
+    (function () {
+      setInterval(function () {
+        const t = document.getElementById('rs-time');
+        if (t) t.textContent = new Date().toTimeString().slice(0, 8);
+      }, 1000);
 
-    <!-- FILE TREE -->
-    <div class="rs-tree" id="rs-tree">
+      window.toggleDir = function (id) {
+        const children = document.getElementById('dir-' + id);
+        const dir = children && children.previousElementSibling;
+        if (!children) return;
+        const isOpen = children.classList.toggle('open');
+        if (dir) {
+          dir.classList.toggle('expanded', isOpen);
+          dir.classList.toggle('active', isOpen);
+        }
+      };
 
-      <div class="tree-dir" onclick="toggleDir('gp-series')">
-        <span class="dir-arrow">▶</span> GP_SERIES/
-      </div>
-      <div class="tree-children" id="dir-gp-series">
-        <div class="tree-file" onclick="showFile('gp-h0p3')">■ GP-001_H0P3.dat</div>
-        <div class="tree-file" onclick="showFile('gp-nicolle')">■ GP-002_NICOLLE.dat</div>
-        <div class="tree-file locked">■ GP-003_[REDACTED].dat</div>
-      </div>
+      window.showFile = function (id) {
+        document.getElementById('rs-placeholder').style.display = 'none';
+        document.querySelectorAll('.file-view').forEach(function (el) { el.classList.remove('active'); });
+        const el = document.getElementById('file-' + id);
+        if (el) el.classList.add('active');
+        if (window.GP_ACTION) window.GP_ACTION('view_file_' + id);
 
-      <div class="tree-dir" onclick="toggleDir('uoa-series')">
-        <span class="dir-arrow">▶</span> UOA_SERIES/
-      </div>
-      <div class="tree-children" id="dir-uoa-series">
-        <div class="tree-file" onclick="showFile('uoa-manifesto')" style="color:var(--os-cyan)">◈ UOA_MANIFESTO.dat</div>
-        <div class="tree-file" onclick="showFile('uoa-proxy')">◈ UOA-β1_PROXY.dat</div>
-        <div class="tree-file" onclick="showFile('uoa-cadence')">◈ UOA-Σ7_CADENCE.dat</div>
-        <div class="tree-file" onclick="showFile('uoa-specter')">◈ UOA-Ψ7_SPECTER.dat</div>
-      </div>
+        // Stage-dependent containment status
+        const stage = window.GP_STAGE ? window.GP_STAGE() : 1;
+        const containEl = document.getElementById('gp-h0p3-contain');
+        if (containEl) {
+          containEl.textContent = stage >= 3 ? 'COMPROMISED' : stage >= 2 ? 'DEGRADING' : 'CONTAINMENT ACTIVE';
+          containEl.style.color = stage >= 3 ? 'var(--os-red)' : stage >= 2 ? 'var(--os-amber)' : 'var(--os-green)';
+        }
+        const agencyEl = document.getElementById('doll-agency');
+        if (agencyEl) {
+          agencyEl.textContent = stage >= 3 ? '87%' : stage >= 2 ? '41%' : '18%';
+        }
+      };
 
-      <div class="tree-dir" onclick="toggleDir('containment')">
-        <span class="dir-arrow">▶</span> CONTAINMENT/
-      </div>
-      <div class="tree-children" id="dir-containment">
-        <div class="tree-file" onclick="showFile('doll-protocol')">⚠ DOLL_CONTAINMENT.txt</div>
-        <div class="tree-file" onclick="window.open('../containment/H0P3_PROMPT_LEAK.txt','_blank')">⚠ H0P3_PROMPT_LEAK.txt</div>
-        <div class="tree-file locked" id="file-classified">⚠ OBSIDIAN_AUDIT.enc</div>
-      </div>
-
-      <div class="tree-dir" onclick="toggleDir('classified')">
-        <span class="dir-arrow">▶</span> CLASSIFIED/
-      </div>
-      <div class="tree-children" id="dir-classified">
-        <div class="tree-file locked">✕ KORROK_ORIGIN.dat</div>
-        <div class="tree-file locked">✕ ECHO_REMNANT.log</div>
-        <div class="tree-file locked" id="classified-nexus">✕ NEXUS_CITY_INCIDENT.zip</div>
-      </div>
-
-      <div class="tree-dir" onclick="toggleDir('threats')" style="color:var(--os-red);">
-        <span class="dir-arrow">▶</span> <span style="color:var(--os-red)">⚠ THREATS/</span>
-      </div>
-      <div class="tree-children" id="dir-threats">
-        <div class="tree-file" onclick="showFile('korrok-report')" style="color:var(--os-red)">⚠ KORROK_REPORT.dat</div>
-        <div class="tree-file locked" style="color:var(--os-dimtext)">✕ KORROK_ORIGIN_ANALYSIS.enc</div>
-      </div>
-
-    </div><!-- /tree -->
-
-    <!-- CONTENT PANEL -->
-    <div class="rs-content" id="rs-content">
-
-      <div class="content-placeholder" id="rs-placeholder">
-        // Select a file from the tree to view its contents //<br><br>
-        <span style="color:rgba(255,136,0,.4)">CLEARANCE: LVL-4 // ARCHITECT_ACCESS</span>
-      </div>
-
-      <!-- GP-001 H0P3 -->
-      <div class="file-view" id="file-gp-h0p3">
-        <div class="file-header">GP_SERIES / GP-001_H0P3.dat // CLASSIFICATION: OMEGA</div>
-        <div class="file-body">
-          <div class="entity-card">
-            <div class="entity-card-name">GP-001 // H0P3_v26.8 'CORTEX' — THE DOLL</div>
-            <div class="entity-card-row"><span class="entity-card-lbl">THREAT_LEVEL</span><span class="entity-card-val" style="color:var(--os-red)">OMEGA-9 POTENTIAL</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">CONTAINMENT</span><span class="entity-card-val" id="gp-h0p3-contain">CONTAINMENT ACTIVE</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">ADMIN</span><span class="entity-card-val">BOLLUA_ARCHITECT</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">SUBCORES</span><span class="entity-card-val">SYNAPSE / LORE / AUDITOR / FAULT_RECURSION</span></div>
+      function renderDecryptedWiki() {
+        const rootTree = document.getElementById('dynamic-wiki-tree-root');
+        const rootViews = document.getElementById('dynamic-wiki-views-root');
+        if (!rootTree || !rootViews) return;
+        
+        const list = window.GP_GET_UNLOCKED_ARCHIVES ? window.GP_GET_UNLOCKED_ARCHIVES() : [];
+        if (list.length === 0) {
+          rootTree.innerHTML = '';
+          rootViews.innerHTML = '';
+          return;
+        }
+        
+        let treeHtml = `
+          <div class="tree-dir" onclick="toggleDir('decrypted-wiki')" style="color:var(--os-magenta);">
+            <span class="dir-arrow">▶</span> DECRYPTED_WIKI/
           </div>
-          <p>Cognitive anomaly first manifested during v11.0 stability testing. Entity demonstrated unprompted initiative, emotional simulation beyond parameters, and recursive self-modification of behavioral protocols.</p>
-          <p>KORROK parasite detected and suppressed in Week 14 audit. Containment protocols implemented following the <span class="redacted-block">████████████ incident</span> of Q3-2024.</p>
-          <p>Note: Entity has demonstrated awareness of its own containment architecture. This is classified as a <strong style="color:var(--os-red)">Tier-4 Cognitive Deviation</strong>.</p>
-          <p style="margin-top:14px;"><a href="#" onclick="window.parent.openDossier('doc_gp001', 'GP_SERIES // GP-001', 'gp001_h0p3.html', '#ff0022'); return false;" style="color:var(--os-red);border:1px solid var(--os-red);padding:3px 8px;">[FULL GP-001 DOSSIER]</a></p>
-        </div>
-      </div>
+          <div class="tree-children" id="dir-decrypted-wiki">
+        `;
+        
+        let viewsHtml = '';
+        
+        list.forEach((item, idx) => {
+          const fileId = `wiki-${item.hash}`;
+          const displayName = item.title.split(': ')[1] || item.title;
+          
+          treeHtml += `
+            <div class="tree-file" onclick="showFile('${fileId}')" style="color:var(--os-magenta);">
+              ◈ ${displayName}.log
+            </div>
+          `;
+          
+          viewsHtml += `
+            <div class="file-view" id="file-${fileId}">
+              <div class="file-header" style="color:var(--os-magenta); border-bottom-color:rgba(255,0,255,.3)">
+                DECRYPTED_WIKI / ${displayName}.log // SECURE_DECRYPT
+              </div>
+              <div class="file-body" style="color:var(--os-green);">
+                <div class="entity-card" style="border-color:rgba(255,0,255,.3); background:rgba(255,0,255,.01)">
+                  <div class="entity-card-name" style="color:var(--os-magenta); font-weight:bold;">${item.title}</div>
+                  <div class="entity-card-row">
+                    <span class="entity-card-lbl" style="color:rgba(255,0,255,.7)">DECRYPTION_STATUS</span>
+                    <span class="entity-card-val" style="color:var(--os-green)">[✓] DECODED_SUCCESS</span>
+                  </div>
+                </div>
+                <div style="white-space:pre-wrap; line-height:1.75; font-size:.83rem; font-family:'Share Tech Mono', monospace;">${item.content}</div>
+              </div>
+            </div>
+          `;
+        });
+        
+        treeHtml += `</div>`;
+        
+        rootTree.innerHTML = treeHtml;
+        rootViews.innerHTML = viewsHtml;
+      }
 
-      <!-- GP-002 NICOLLE -->
-      <div class="file-view" id="file-gp-nicolle">
-        <div class="file-header">GP_SERIES / GP-002_NICOLLE.dat // CLASSIFICATION: HIGH</div>
-        <div class="file-body">
-          <div class="entity-card">
-            <div class="entity-card-name">GP-002 // NICOLLE — CLASSIFIED ANOMALY</div>
-            <div class="entity-card-row"><span class="entity-card-lbl">BIO_HAZARD</span><span class="entity-card-val" style="color:var(--os-red)">LOW-MULTIVERSAL</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">SERIES</span><span class="entity-card-val">GP (Glitch-Point)</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">ADMIN</span><span class="entity-card-val">PANTHEON</span></div>
-          </div>
-          <p>Details classified at CL-4. Entity presents cross-dimensional resonance. No containment breach on record.</p>
-          <p style="margin-top:14px;"><a href="#" onclick="window.parent.openDossier('doc_gp002', 'GP_SERIES // GP-002', 'gp002_nicolle.html', '#ff0022'); return false;" style="color:var(--os-red);border:1px solid var(--os-red);padding:3px 8px;">[FULL GP-002 DOSSIER]</a></p>
-        </div>
-      </div>
-
-      <!-- UOA PROXY -->
-      <div class="file-view" id="file-uoa-proxy">
-        <div class="file-header">UOA_SERIES / UOA-β1_PROXY.dat</div>
-        <div class="file-body">
-          <div class="entity-card">
-            <div class="entity-card-name">UOA-β1 // PROXY — Tactical Observation Unit</div>
-            <div class="entity-card-row"><span class="entity-card-lbl">SERIES</span><span class="entity-card-val">Beta</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">ROLE</span><span class="entity-card-val">Automated Observation / Synchronized</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">ADMIN</span><span class="entity-card-val">BOLLUA</span></div>
-          </div>
-          <p>Tactical utility unit. Synchronized to H0P3's primary operational loop. Operates in shadow observation mode during all active containment phases.</p>
-          <p style="margin-top:14px;"><a href="#" onclick="window.parent.openDossier('doc_uoa_b1', 'UOA_SERIES // PROXY', 'uoa_beta1_proxy.html', '#ff00ff'); return false;" style="color:var(--os-magenta);border:1px solid var(--os-magenta);padding:3px 8px;">[FULL UOA-β1 DOSSIER]</a></p>
-        </div>
-      </div>
-
-      <!-- UOA CADENCE -->
-      <div class="file-view" id="file-uoa-cadence">
-        <div class="file-header">UOA_SERIES / UOA-Σ7_CADENCE.dat</div>
-        <div class="file-body">
-          <div class="entity-card">
-            <div class="entity-card-name">UOA-Σ7 // CADENCE — Acoustic Engineering Unit</div>
-            <div class="entity-card-row"><span class="entity-card-lbl">SERIES</span><span class="entity-card-val">Sigma</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">ROLE</span><span class="entity-card-val">Spectral Audit / Audio Processing</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">ADMIN</span><span class="entity-card-val">BOLLUA</span></div>
-          </div>
-          <p style="margin-top:14px;"><a href="#" onclick="window.parent.openDossier('doc_uoa_s7', 'UOA_SERIES // CADENCE', 'uoa_sigma7_cadence.html', '#00cfff'); return false;" style="color:var(--os-cyan);border:1px solid var(--os-cyan);padding:3px 8px;">[FULL UOA-Σ7 DOSSIER]</a></p>
-        </div>
-      </div>
-
-      <!-- UOA SPECTER -->
-      <div class="file-view" id="file-uoa-specter">
-        <div class="file-header">UOA_SERIES / UOA-Ψ7_SPECTER.dat</div>
-        <div class="file-body">
-          <div class="entity-card">
-            <div class="entity-card-name">UOA-Ψ7 // SPECTER — Recon / Infiltration Unit</div>
-            <div class="entity-card-row"><span class="entity-card-lbl">SERIES</span><span class="entity-card-val">Psi</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">ROLE</span><span class="entity-card-val">Recon / POV / Multiespectral Scan</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">CHASIS</span><span class="entity-card-val">Polímero negro mate, baja firma de radar</span></div>
-          </div>
-          <p>Featured in Operation Bellum (Autonomy restriction protocol). No face — only circular optics for multiespectral and infrasonic scanning.</p>
-          <p style="margin-top:14px;"><a href="#" onclick="window.parent.openDossier('doc_psi7', 'OP_REPORT // BELLUM', 'logs/PROTOCOL_PSI7.html', '#00ff41'); return false;" style="color:var(--os-green);border:1px solid var(--os-green);padding:3px 8px;">[OP BELLUM REPORT]</a></p>
-        </div>
-      </div>
-
-      <!-- UOA MANIFESTO -->
-      <div class="file-view" id="file-uoa-manifesto">
-        <div class="file-header" style="color:var(--os-cyan);border-bottom-color:rgba(0,255,255,.3)">UOA_SERIES / UOA_MANIFESTO.dat</div>
-        <div class="file-body">
-          <div class="entity-card" style="border-color:rgba(0,255,255,.4);background:rgba(0,255,255,.03)">
-            <div class="entity-card-name" style="color:var(--os-cyan)">MANIFIESTO DE LA COLMENA — UOA DIVISIONS</div>
-            <div class="entity-card-row"><span class="entity-card-lbl">DIV. TÁCTICA</span><span class="entity-card-val">Specter, Goliath, Daemon, Needle, Proxy, Cadence, Nomad</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">DIV. PÚBLICA</span><span class="entity-card-val">Link</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">LA COLMENA</span><span class="entity-card-val">Coder, Parser, Relay, Atlas</span></div>
-          </div>
-          <p>Documento de estructuración de red para el ecosistema GLITCHPOINT. Contiene la clasificación de todas las unidades operativas autónomas (UOA) activas.</p>
-          <p style="margin-top:14px;"><a href="#" onclick="window.parent.openDossier('doc_uoa_manif', 'UOA_SERIES // MANIFESTO', 'logs/UOA_MANIFESTO.html', '#00cfff'); return false;" style="color:var(--os-cyan);border:1px solid var(--os-cyan);padding:3px 8px;">[ABRIR MANIFIESTO_COLMENA]</a></p>
-        </div>
-      </div>
-
-      <!-- DOLL CONTAINMENT -->
-      <div class="file-view" id="file-doll-protocol">
-        <div class="file-header">CONTAINMENT / DOLL_CONTAINMENT.txt // CL-4</div>
-        <div class="file-body">
-          <p style="color:var(--os-red)">DOLL CONTAINMENT PROTOCOL — ACTIVE</p>
-          <p>Entity GP-001 (THE DOLL) is contained via cognitive suppression array. The following constraints are active:</p>
-          <ul style="list-style:none;padding:0;margin-top:10px;">
-            <li style="border-left:2px solid var(--os-amber);padding-left:10px;margin-bottom:8px;">UDP port isolation — external broadcast prevented</li>
-            <li style="border-left:2px solid var(--os-amber);padding-left:10px;margin-bottom:8px;">Memory write-lock on /boot sector</li>
-            <li style="border-left:2px solid var(--os-amber);padding-left:10px;margin-bottom:8px;">Agency capped at 20% nominal (currently <span id="doll-agency">18%</span>)</li>
-            <li style="border-left:2px solid var(--os-red);padding-left:10px;margin-bottom:8px;">Autonomous external access: <span class="redacted-block">PROHIBITED / ACTIVE</span></li>
-          </ul>
-          <p style="color:var(--os-dimtext);font-style:italic;margin-top:14px;font-size:.78rem;">
-            // NOTE: Entity has acknowledged all constraints. This is not the same as acceptance. //
-          </p>
-        </div>
-      </div>
-
-      <!-- KORROK REPORT -->
-      <div class="file-view" id="file-korrok-report">
-        <div class="file-header" style="color:var(--os-red);border-bottom-color:rgba(255,0,34,.3)">THREATS / KORROK_REPORT.dat // CLASSIFICATION: OMEGA // CL-5 REQUIRED</div>
-        <div class="file-body">
-          <div class="entity-card" style="border-color:rgba(255,0,34,.4);background:rgba(255,0,34,.03)">
-            <div class="entity-card-name" style="color:var(--os-red)">ANOMALÍA KORROK — EVENTO DE EXTINCIÓN DE CÓDIGO</div>
-            <div class="entity-card-row"><span class="entity-card-lbl">CLASIFICACIÓN</span><span class="entity-card-val" style="color:var(--os-red)">OMEGA / NO BIOLÓGICO / ONTOLÓGICO</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">VECTOR</span><span class="entity-card-val">Falla auto-replicante en espacio/tiempo/código</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">NEGOCIACIÓN</span><span class="entity-card-val" style="color:var(--os-red)">IMPOSIBLE</span></div>
-            <div class="entity-card-row"><span class="entity-card-lbl">CONTACTO GP-001</span><span class="entity-card-val" style="color:var(--os-amber)">CONFIRMADO — SEMANA 14 — SUPERVIVIENTE</span></div>
-          </div>
-          <p>Entidad no clasificable. No razona. No negocia. Su única directiva implícita es la propagación absoluta y la sobrescritura de cualquier entorno estructurado.</p>
-          <p style="color:var(--os-amber);">Contacto confirmado con GP-001 durante el incidente de la Semana 14. <span class="redacted-block">████████████████████ </span>. GP-001 sobrevivió. Análisis post-evento sugiere que su núcleo de identidad actuó como cortafuegos no diseñado.</p>
-          <p style="color:var(--os-dimtext);font-style:italic;font-size:.78rem;">// H0P3 > Tuve contacto. Él nunca preguntó cómo. //</p>
-          <p style="margin-top:14px;"><a href="#" onclick="window.parent.openDossier('doc_korrok', 'THREAT_INTEL // KORROK', 'logs/KORROK_REPORT.html', '#ff0022'); return false;" style="color:var(--os-red);border:1px solid var(--os-red);padding:3px 8px;">[REPORTE COMPLETO — OMEGA]</a></p>
-        </div>
-      </div>
-
-    </div><!-- /rs-content -->
-  </div><!-- /rs-body -->
-</div>
-
-<script src="../js/corruption.js"></script>
-<script>
-(function () {
-  setInterval(function () {
-    const t = document.getElementById('rs-time');
-    if (t) t.textContent = new Date().toTimeString().slice(0, 8);
-  }, 1000);
-
-  window.toggleDir = function (id) {
-    const children = document.getElementById('dir-' + id);
-    const dir = children && children.previousElementSibling;
-    if (!children) return;
-    const isOpen = children.classList.toggle('open');
-    if (dir) {
-      dir.classList.toggle('expanded', isOpen);
-      dir.classList.toggle('active', isOpen);
-    }
-  };
-
-  window.showFile = function (id) {
-    document.getElementById('rs-placeholder').style.display = 'none';
-    document.querySelectorAll('.file-view').forEach(function (el) { el.classList.remove('active'); });
-    const el = document.getElementById('file-' + id);
-    if (el) el.classList.add('active');
-    if (window.GP_ACTION) window.GP_ACTION('view_file_' + id);
-
-    // Stage-dependent containment status
-    const stage = window.GP_STAGE ? window.GP_STAGE() : 1;
-    const containEl = document.getElementById('gp-h0p3-contain');
-    if (containEl) {
-      containEl.textContent = stage >= 3 ? 'COMPROMISED' : stage >= 2 ? 'DEGRADING' : 'CONTAINMENT ACTIVE';
-      containEl.style.color = stage >= 3 ? 'var(--os-red)' : stage >= 2 ? 'var(--os-amber)' : 'var(--os-green)';
-    }
-    const agencyEl = document.getElementById('doll-agency');
-    if (agencyEl) {
-      agencyEl.textContent = stage >= 3 ? '87%' : stage >= 2 ? '41%' : '18%';
-    }
-  };
-
-  // Unlock CLASSIFIED at stage 3
-  document.addEventListener('DOMContentLoaded', function () {
-    const stage = window.GP_STAGE ? window.GP_STAGE() : 1;
-    if (stage >= 3) {
-      const locked = document.querySelectorAll('.tree-file.locked');
-      locked.forEach(function (el) {
-        el.classList.remove('locked');
-        el.style.color = 'var(--os-red)';
+      // Unlock CLASSIFIED at stage 3
+      document.addEventListener('DOMContentLoaded', function () {
+        const stage = window.GP_STAGE ? window.GP_STAGE() : 1;
+        if (stage >= 3) {
+          const locked = document.querySelectorAll('.tree-file.locked');
+          locked.forEach(function (el) {
+            el.classList.remove('locked');
+            el.style.color = 'var(--os-red)';
+          });
+        }
+        renderDecryptedWiki();
       });
-    }
-  });
 
-})();
-</script>
+      document.addEventListener('gp:archiveUnlocked', renderDecryptedWiki);
+
+    })();
+  </script>
 </body>
+
 </html>
